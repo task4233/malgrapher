@@ -1,6 +1,6 @@
 import gdb
 
-filename='test'
+filename='test32'
 
 gdb.execute('file ' + filename)
 b = gdb.execute('b main')
@@ -12,12 +12,12 @@ with open('out_{}.txt'.format(filename), 'w') as f:
             out = gdb.execute('step', to_string=True)
             if out == 'The program is not being run.':
                 break
-            lb = out.find('RIP')
-            LEN = out[lb:].find('R8')
+            lb = out.find('EIP')
+            LEN = out[lb:].find('EFLAGS')
             line = str(out[lb:lb+LEN])
             if '\tj' in line:
                 words = line.split()
-                if int(words[1][6:6+14], 0) > 0x7ffff7000000:
+                if int(words[1][6:6+10], 0) > 0xf7000000:
                     break
                 f.write(" ".join(words[1:]) + "\n")
     except Exception as e:

@@ -20,6 +20,7 @@ with open('out_{}.txt'.format(filename), 'w') as f:
                 if int(words[1][6:6+10], 0) > 0xf7000000:
                     break
                 f.write(" ".join(words[1:]) + "\n")
+                print(out)
     except Exception as e:
         print(e)
     finally:

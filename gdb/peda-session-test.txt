@@ -1,2 +1,5 @@
 break main
+break *0x555555554666
+break *0x555555554654
+break *0x555555554694
 

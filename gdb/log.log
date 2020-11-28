@@ -1,0 +1,535 @@
+Breakpoint 1 at 0x63e
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: [;31m0x55555555463a[0m (<main>:	push   rbp)
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRDX[0m: [;34m0x7fffffffe2c8[0m --> [;34m0x7fffffffe686[0m ("CLUTTER_IM_MODULE=xim")
+[;32mRSI[0m: [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")
+[;32mRDI[0m: 0x1 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRIP[0m: [;31m0x55555555463e[0m (<main+4>:	sub    rsp,0x10)
+[;32mR8 [0m: [;34m0x7ffff7dced80[0m --> 0x0 
+[;32mR9 [0m: [;34m0x7ffff7dced80[0m --> 0x0 
+[;32mR10[0m: 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x246 ([;32mcarry[0m [;1;31mPARITY[0m [;32madjust[0m [;1;31mZERO[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554635 <frame_dummy+5>:[;2;33m	jmp    0x5555555545a0 <register_tm_clones>[0m
+   0x55555555463a <main>:[;2m	push   rbp[0m
+   0x55555555463b <main+1>:[;2m	mov    rbp,rsp[0m
+=> 0x55555555463e <main+4>:[;1;32m	sub    rsp,0x10[0m
+   0x555555554642 <main+8>:[m	mov    DWORD PTR [rbp-0x8],0x0[0m
+   0x555555554649 <main+15>:[m	mov    DWORD PTR [rbp-0x4],0x1[0m
+   0x555555554650 <main+22>:[;31m	cmp    DWORD PTR [rbp-0x8],0x0[0m
+   0x555555554654 <main+26>:[;33m	je     0x555555554684 <main+74>[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0008| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0016| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0024| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0032| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0040| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[m0048| [;34m0x7fffffffe200[0m --> 0x0 [0m
+[m0056| [;34m0x7fffffffe208[0m --> 0xcf8c153147162944 [0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+Breakpoint 1, 0x000055555555463e in main ()
+0x0000555555554642 in main ()
+line => => 0x555555554642 <main+8>:[;1;32m	mov    DWORD PTR [rbp-0x8],0x0[0m
+0x0000555555554649 in main ()
+line => => 0x555555554649 <main+15>:[;1;32m	mov    DWORD PTR [rbp-0x4],0x1[0m
+0x0000555555554650 in main ()
+line => => 0x555555554650 <main+22>:[;1;32m	cmp    DWORD PTR [rbp-0x8],0x0[0m
+0x0000555555554654 in main ()
+line => => 0x555555554654 <main+26>:[;1;32m	je     0x555555554684 <main+74>[0m
+fr: 0x555555554654
+to: 0x555555554684
+line: => 0x555555554654 <main+26>:[;1;32m	je     0x555555554684 <main+74>[0m
+addrs_stk: [['je', '0x555555554654']]
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: [;31m0x55555555463a[0m (<main>:	push   rbp)
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRDX[0m: [;34m0x7fffffffe2c8[0m --> [;34m0x7fffffffe686[0m ("CLUTTER_IM_MODULE=xim")
+[;32mRSI[0m: [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")
+[;32mRDI[0m: 0x1 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554654[0m (<main+26>:	je     0x555555554684 <main+74>)
+[;32mR8 [0m: [;34m0x7ffff7dced80[0m --> 0x0 
+[;32mR9 [0m: [;34m0x7ffff7dced80[0m --> 0x0 
+[;32mR10[0m: 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x246 ([;32mcarry[0m [;1;31mPARITY[0m [;32madjust[0m [;1;31mZERO[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554642 <main+8>:[;2m	mov    DWORD PTR [rbp-0x8],0x0[0m
+   0x555555554649 <main+15>:[;2m	mov    DWORD PTR [rbp-0x4],0x1[0m
+   0x555555554650 <main+22>:[;2;31m	cmp    DWORD PTR [rbp-0x8],0x0[0m
+=> 0x555555554654 <main+26>:[;1;32m	je     0x555555554684 <main+74>[0m
+ | 0x555555554656 <main+28>:[m	lea    rdi,[rip+0xeb]        # 0x555555554748[0m
+ | 0x55555555465d <main+35>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x555555554662 <main+40>:[;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+ | 0x555555554666 <main+44>:[;33m	je     0x555555554676 <main+60>[0m
+ |->[;31m   0x555555554684 <main+74>:	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+       0x55555555468b <main+81>:	call   0x555555554510 <puts@plt>
+       0x555555554690 <main+86>:	cmp    DWORD PTR [rbp-0x4],0x0
+       0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+0x0000555555554656 in main ()
+line => => 0x555555554656 <main+28>:[;1;32m	lea    rdi,[rip+0xeb]        # 0x555555554748[0m
+0x000055555555465d in main ()
+line => => 0x55555555465d <main+35>:[;1;32m	call   0x555555554510 <puts@plt>[0m
+0x0000555555554662 in main ()
+line => => 0x555555554662 <main+40>:[;1;32m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+0x0000555555554666 in main ()
+line => => 0x555555554666 <main+44>:[;1;32m	je     0x555555554676 <main+60>[0m
+fr: 0x555555554666
+to: 0x555555554676
+line: => 0x555555554666 <main+44>:[;1;32m	je     0x555555554676 <main+60>[0m
+addrs_stk: [['je', '0x555555554654'], ['je', '0x555555554666']]
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x5 
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: [;32m0x55555555474c[0m --> 0x2121212100000000 ('')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x555555554748[0m --> 0x65757274 ('true')
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554666[0m (<main+44>:	je     0x555555554676 <main+60>)
+[;32mR8 [0m: 0x0 
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x202 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;32mzero[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554656 <main+28>:[;2m	lea    rdi,[rip+0xeb]        # 0x555555554748[0m
+   0x55555555465d <main+35>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+   0x555555554662 <main+40>:[;2;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+=> 0x555555554666 <main+44>:[;1;32m	je     0x555555554676 <main+60>[0m
+   0x555555554668 <main+46>:[m	lea    rdi,[rip+0xe1]        # 0x555555554750[0m
+   0x55555555466f <main+53>:[;32m	call   0x555555554510 <puts@plt>[0m
+   0x555555554674 <main+58>:[;33m	jmp    0x5555555546b0 <main+118>[0m
+   0x555555554676 <main+60>:[m	lea    rdi,[rip+0xfb]        # 0x555555554778[0m
+[;32m                                                              JUMP is NOT taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+0x0000555555554668 in main ()
+line => => 0x555555554668 <main+46>:[;1;32m	lea    rdi,[rip+0xe1]        # 0x555555554750[0m
+0x000055555555466f in main ()
+line => => 0x55555555466f <main+53>:[;1;32m	call   0x555555554510 <puts@plt>[0m
+0x0000555555554674 in main ()
+line => => 0x555555554674 <main+58>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+fr: 0x555555554674
+to: 0x5555555546b0
+line: => 0x555555554674 <main+58>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x28 ('(')
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0xb40 ('@\x0b')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x555555554750[0m ('!' <repeats 13 times>, "tt", '!' <repeats 24 times>)
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554674[0m (<main+58>:	jmp    0x5555555546b0 <main+118>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x202 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;32mzero[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554666 <main+44>:[;2;33m	je     0x555555554676 <main+60>[0m
+   0x555555554668 <main+46>:[;2m	lea    rdi,[rip+0xe1]        # 0x555555554750[0m
+   0x55555555466f <main+53>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+=> 0x555555554674 <main+58>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+ | 0x555555554676 <main+60>:[m	lea    rdi,[rip+0xfb]        # 0x555555554778[0m
+ | 0x55555555467d <main+67>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x555555554682 <main+72>:[;33m	jmp    0x5555555546b0 <main+118>[0m
+ | 0x555555554684 <main+74>:[m	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+ |->[;31m   0x5555555546b0 <main+118>:	mov    eax,0x0[0m
+       0x5555555546b5 <main+123>:	leave
+       0x5555555546b6 <main+124>:	ret
+       0x5555555546b7:	nop    WORD PTR [rax+rax*1+0x0]
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+0x00005555555546b0 in main ()
+line => => 0x5555555546b0 <main+118>:[;1;32m	mov    eax,0x0[0m
+0x00005555555546b5 in main ()
+line => => 0x5555555546b5 <main+123>:[;1;32m	leave  [0m
+leave here
+Breakpoint 2 at 0x555555554666
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x0 
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0xb40 ('@\x0b')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x555555554750[0m ('!' <repeats 13 times>, "tt", '!' <repeats 24 times>)
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554666[0m (<main+44>:	je     0x555555554676 <main+60>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x242 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;1;31mZERO[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554656 <main+28>:[;2m	lea    rdi,[rip+0xeb]        # 0x555555554748[0m
+   0x55555555465d <main+35>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+   0x555555554662 <main+40>:[;2;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+=> 0x555555554666 <main+44>:[;1;32m	je     0x555555554676 <main+60>[0m
+ | 0x555555554668 <main+46>:[m	lea    rdi,[rip+0xe1]        # 0x555555554750[0m
+ | 0x55555555466f <main+53>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x555555554674 <main+58>:[;33m	jmp    0x5555555546b0 <main+118>[0m
+ | 0x555555554676 <main+60>:[m	lea    rdi,[rip+0xfb]        # 0x555555554778[0m
+ |->[;31m   0x555555554676 <main+60>:	lea    rdi,[rip+0xfb]        # 0x555555554778[0m
+       0x55555555467d <main+67>:	call   0x555555554510 <puts@plt>
+       0x555555554682 <main+72>:	jmp    0x5555555546b0 <main+118>
+       0x555555554684 <main+74>:	lea    rdi,[rip+0x115]        # 0x5555555547a0
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+Breakpoint 2, 0x0000555555554666 in main ()
+hasn't left yet
+0x0000555555554676 in main ()
+line => => 0x555555554676 <main+60>:[;1;32m	lea    rdi,[rip+0xfb]        # 0x555555554778[0m
+0x000055555555467d in main ()
+line => => 0x55555555467d <main+67>:[;1;32m	call   0x555555554510 <puts@plt>[0m
+0x0000555555554682 in main ()
+line => => 0x555555554682 <main+72>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+fr: 0x555555554682
+to: 0x5555555546b0
+line: => 0x555555554682 <main+72>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x28 ('(')
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0xb40 ('@\x0b')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x555555554778[0m ('!' <repeats 13 times>, "tf", '!' <repeats 24 times>)
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554682[0m (<main+72>:	jmp    0x5555555546b0 <main+118>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x202 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;32mzero[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554674 <main+58>:[;2;33m	jmp    0x5555555546b0 <main+118>[0m
+   0x555555554676 <main+60>:[;2m	lea    rdi,[rip+0xfb]        # 0x555555554778[0m
+   0x55555555467d <main+67>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+=> 0x555555554682 <main+72>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+ | 0x555555554684 <main+74>:[m	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+ | 0x55555555468b <main+81>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x555555554690 <main+86>:[;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+ | 0x555555554694 <main+90>:[;33m	je     0x5555555546a4 <main+106>[0m
+ |->[;31m   0x5555555546b0 <main+118>:	mov    eax,0x0[0m
+       0x5555555546b5 <main+123>:	leave
+       0x5555555546b6 <main+124>:	ret
+       0x5555555546b7:	nop    WORD PTR [rax+rax*1+0x0]
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+0x00005555555546b0 in main ()
+line => => 0x5555555546b0 <main+118>:[;1;32m	mov    eax,0x0[0m
+0x00005555555546b5 in main ()
+line => => 0x5555555546b5 <main+123>:[;1;32m	leave  [0m
+leave here
+Breakpoint 3 at 0x555555554654
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x0 
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0xb40 ('@\x0b')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x555555554778[0m ('!' <repeats 13 times>, "tf", '!' <repeats 24 times>)
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554654[0m (<main+26>:	je     0x555555554684 <main+74>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x242 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;1;31mZERO[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554642 <main+8>:[;2m	mov    DWORD PTR [rbp-0x8],0x0[0m
+   0x555555554649 <main+15>:[;2m	mov    DWORD PTR [rbp-0x4],0x1[0m
+   0x555555554650 <main+22>:[;2;31m	cmp    DWORD PTR [rbp-0x8],0x0[0m
+=> 0x555555554654 <main+26>:[;1;32m	je     0x555555554684 <main+74>[0m
+ | 0x555555554656 <main+28>:[m	lea    rdi,[rip+0xeb]        # 0x555555554748[0m
+ | 0x55555555465d <main+35>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x555555554662 <main+40>:[;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+ | 0x555555554666 <main+44>:[;33m	je     0x555555554676 <main+60>[0m
+ |->[;31m   0x555555554684 <main+74>:	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+       0x55555555468b <main+81>:	call   0x555555554510 <puts@plt>
+       0x555555554690 <main+86>:	cmp    DWORD PTR [rbp-0x4],0x0
+       0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+Breakpoint 3, 0x0000555555554654 in main ()
+hasn't left yet
+0x0000555555554684 in main ()
+line => => 0x555555554684 <main+74>:[;1;32m	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+0x000055555555468b in main ()
+line => => 0x55555555468b <main+81>:[;1;32m	call   0x555555554510 <puts@plt>[0m
+0x0000555555554690 in main ()
+line => => 0x555555554690 <main+86>:[;1;32m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+0x0000555555554694 in main ()
+line => => 0x555555554694 <main+90>:[;1;32m	je     0x5555555546a4 <main+106>[0m
+fr: 0x555555554694
+to: 0x5555555546a4
+line: => 0x555555554694 <main+90>:[;1;32m	je     0x5555555546a4 <main+106>[0m
+addrs_stk: [['je', '0x555555554694']]
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x6 
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0x65736c61 ('alse')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: 0x736c6166 ('fals')
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554694[0m (<main+90>:	je     0x5555555546a4 <main+106>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x202 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;32mzero[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554684 <main+74>:[;2m	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+   0x55555555468b <main+81>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+   0x555555554690 <main+86>:[;2;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+=> 0x555555554694 <main+90>:[;1;32m	je     0x5555555546a4 <main+106>[0m
+   0x555555554696 <main+92>:[m	lea    rdi,[rip+0x10b]        # 0x5555555547a8[0m
+   0x55555555469d <main+99>:[;32m	call   0x555555554510 <puts@plt>[0m
+   0x5555555546a2 <main+104>:[;33m	jmp    0x5555555546b0 <main+118>[0m
+   0x5555555546a4 <main+106>:[m	lea    rdi,[rip+0x125]        # 0x5555555547d0[0m
+[;32m                                                              JUMP is NOT taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+0x0000555555554696 in main ()
+line => => 0x555555554696 <main+92>:[;1;32m	lea    rdi,[rip+0x10b]        # 0x5555555547a8[0m
+0x000055555555469d in main ()
+line => => 0x55555555469d <main+99>:[;1;32m	call   0x555555554510 <puts@plt>[0m
+0x00005555555546a2 in main ()
+line => => 0x5555555546a2 <main+104>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+fr: 0x5555555546a2
+to: 0x5555555546b0
+line: => 0x5555555546a2 <main+104>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x28 ('(')
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0xb40 ('@\x0b')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x5555555547a8[0m ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x5555555546a2[0m (<main+104>:	jmp    0x5555555546b0 <main+118>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x202 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;32mzero[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554694 <main+90>:[;2;33m	je     0x5555555546a4 <main+106>[0m
+   0x555555554696 <main+92>:[;2m	lea    rdi,[rip+0x10b]        # 0x5555555547a8[0m
+   0x55555555469d <main+99>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+=> 0x5555555546a2 <main+104>:[;1;32m	jmp    0x5555555546b0 <main+118>[0m
+ | 0x5555555546a4 <main+106>:[m	lea    rdi,[rip+0x125]        # 0x5555555547d0[0m
+ | 0x5555555546ab <main+113>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x5555555546b0 <main+118>:[m	mov    eax,0x0[0m
+ | 0x5555555546b5 <main+123>:[m	leave[0m
+ |->[;31m   0x5555555546b0 <main+118>:	mov    eax,0x0[0m
+       0x5555555546b5 <main+123>:	leave
+       0x5555555546b6 <main+124>:	ret
+       0x5555555546b7:	nop    WORD PTR [rax+rax*1+0x0]
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+0x00005555555546b0 in main ()
+line => => 0x5555555546b0 <main+118>:[;1;32m	mov    eax,0x0[0m
+0x00005555555546b5 in main ()
+line => => 0x5555555546b5 <main+123>:[;1;32m	leave  [0m
+leave here
+Breakpoint 4 at 0x555555554694
+[2J[H[;34m[----------------------------------registers-----------------------------------][0m
+[m[;32mRAX[0m: 0x0 
+[;32mRBX[0m: 0x0 
+[;32mRCX[0m: 0xb40 ('@\x0b')
+[;32mRDX[0m: [;34m0x7ffff7dcf8c0[0m --> 0x0 
+[;32mRSI[0m: [;32m0x5555555547a8[0m ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+[;32mRDI[0m: [;34m0x7ffff7dce760[0m --> 0xfbad2884 
+[;32mRBP[0m: [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)
+[;32mRSP[0m: [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mRIP[0m: [;31m0x555555554694[0m (<main+90>:	je     0x5555555546a4 <main+106>)
+[;32mR8 [0m: [;34m0x7ffff7fdc4c0[0m (0x00007ffff7fdc4c0)
+[;32mR9 [0m: 0x0 
+[;32mR10[0m: [;34m0x555555756010[0m --> 0x0 
+[;32mR11[0m: 0x0 
+[;32mR12[0m: [;31m0x555555554530[0m (<_start>:	xor    ebp,ebp)
+[;32mR13[0m: [;34m0x7fffffffe2b0[0m --> 0x1 
+[;32mR14[0m: 0x0 
+[;32mR15[0m: 0x0[0m
+[m[;32mEFLAGS[0m: 0x242 ([;32mcarry[0m [;32mparity[0m [;32madjust[0m [;1;31mZERO[0m [;32msign[0m [;32mtrap[0m [;1;31mINTERRUPT[0m [;32mdirection[0m [;32moverflow[0m)[0m
+[m[;34m[-------------------------------------code-------------------------------------][0m[0m
+[m   0x555555554684 <main+74>:[;2m	lea    rdi,[rip+0x115]        # 0x5555555547a0[0m
+   0x55555555468b <main+81>:[;2;32m	call   0x555555554510 <puts@plt>[0m
+   0x555555554690 <main+86>:[;2;31m	cmp    DWORD PTR [rbp-0x4],0x0[0m
+=> 0x555555554694 <main+90>:[;1;32m	je     0x5555555546a4 <main+106>[0m
+ | 0x555555554696 <main+92>:[m	lea    rdi,[rip+0x10b]        # 0x5555555547a8[0m
+ | 0x55555555469d <main+99>:[;32m	call   0x555555554510 <puts@plt>[0m
+ | 0x5555555546a2 <main+104>:[;33m	jmp    0x5555555546b0 <main+118>[0m
+ | 0x5555555546a4 <main+106>:[m	lea    rdi,[rip+0x125]        # 0x5555555547d0[0m
+ |->[;31m   0x5555555546a4 <main+106>:	lea    rdi,[rip+0x125]        # 0x5555555547d0[0m
+       0x5555555546ab <main+113>:	call   0x555555554510 <puts@plt>
+       0x5555555546b0 <main+118>:	mov    eax,0x0
+       0x5555555546b5 <main+123>:	leave
+[;31m                                                                  JUMP is taken[0m[0m
+[m[;34m[------------------------------------stack-------------------------------------][0m[0m
+[m0000| [;34m0x7fffffffe1c0[0m --> [;34m0x7fffffffe2b0[0m --> 0x1 [0m
+[m0008| [;34m0x7fffffffe1c8[0m --> 0x100000000 [0m
+[m0016| [;34m0x7fffffffe1d0[0m --> [;31m0x5555555546c0[0m (<__libc_csu_init>:	push   r15)[0m
+[m0024| [;34m0x7fffffffe1d8[0m --> [;31m0x7ffff7a03bf7[0m (<__libc_start_main+231>:	mov    edi,eax)[0m
+[m0032| [;34m0x7fffffffe1e0[0m --> 0x1 [0m
+[m0040| [;34m0x7fffffffe1e8[0m --> [;34m0x7fffffffe2b8[0m --> [;34m0x7fffffffe656[0m ("/home/al17111/work/research/playground/gdb/test")[0m
+[m0048| [;34m0x7fffffffe1f0[0m --> 0x100008000 [0m
+[m0056| [;34m0x7fffffffe1f8[0m --> [;31m0x55555555463a[0m (<main>:	push   rbp)[0m
+[;34m[------------------------------------------------------------------------------][0m
+[mLegend: [;31mcode[0m, [;34mdata[0m, [;32mrodata[0m, value[0m
+
+Breakpoint 4, 0x0000555555554694 in main ()
+hasn't left yet
+0x00005555555546a4 in main ()
+line => => 0x5555555546a4 <main+106>:[;1;32m	lea    rdi,[rip+0x125]        # 0x5555555547d0[0m
+0x00005555555546ab in main ()
+line => => 0x5555555546ab <main+113>:[;1;32m	call   0x555555554510 <puts@plt>[0m
+0x00005555555546b0 in main ()
+line => => 0x5555555546b0 <main+118>:[;1;32m	mov    eax,0x0[0m
+0x00005555555546b5 in main ()
+line => => 0x5555555546b5 <main+123>:[;1;32m	leave  [0m
+leave here

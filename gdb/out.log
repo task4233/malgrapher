@@ -1,0 +1,963 @@
+~/work/research/playground/gdb$ export PS1="$ "
+$ ls
+log  log.log  note.md  out_test32.txt  out_test_log.txt  out_test.txt  peda-session-sample.txt	peda-session-test32.txt  peda-session-test.txt	sample	step32.py  step.py  test  test32  test.c
+$ gdb -q ./test32
+Reading symbols from ./test32...(no debugging symbols found)...done.
+gdb-peda$ b main
+Breakpoint 1 at 0x52c
+gdb-peda$ r
+Starting program: /home/al17111/work/research/playground/gdb/test32 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd250 --> 0xffffd270 --> 0x1 
+EIP: 0x5655552c (<main+15>:	sub    esp,0x10)
+EFLAGS: 0x286 (carry PARITY adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555528 <main+11>:	mov    ebp,esp
+   0x5655552a <main+13>:	push   ebx
+   0x5655552b <main+14>:	push   ecx
+=> 0x5655552c <main+15>:	sub    esp,0x10
+   0x5655552f <main+18>:	call   0x56555420 <__x86.get_pc_thunk.bx>
+   0x56555534 <main+23>:	add    ebx,0x1aa4
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd250 --> 0xffffd270 --> 0x1 
+0004| 0xffffd254 --> 0x0 
+0008| 0xffffd258 --> 0x0 
+0012| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0016| 0xffffd260 --> 0xf7fb1000 --> 0x1d7d8c 
+0020| 0xffffd264 --> 0xf7fb1000 --> 0x1d7d8c 
+0024| 0xffffd268 --> 0x0 
+0028| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+
+Breakpoint 1, 0x5655552c in main ()
+gdb-peda$ n
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x5655552f (<main+18>:	call   0x56555420 <__x86.get_pc_thunk.bx>)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655552a <main+13>:	push   ebx
+   0x5655552b <main+14>:	push   ecx
+   0x5655552c <main+15>:	sub    esp,0x10
+=> 0x5655552f <main+18>:	call   0x56555420 <__x86.get_pc_thunk.bx>
+   0x56555534 <main+23>:	add    ebx,0x1aa4
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+   0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+Guessed arguments:
+arg[0]: 0x1 
+arg[1]: 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+arg[2]: 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+arg[3]: 0x56555601 (<__libc_csu_init+33>:	lea    eax,[ebx-0x100])
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd24c --> 0x56555601 (<__libc_csu_init+33>:	lea    eax,[ebx-0x100])
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x5655552f in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56555534 (<main+23>:	add    ebx,0x1aa4)
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x56555534 (<main+23>:	add    ebx,0x1aa4)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655552b <main+14>:	push   ecx
+   0x5655552c <main+15>:	sub    esp,0x10
+   0x5655552f <main+18>:	call   0x56555420 <__x86.get_pc_thunk.bx>
+=> 0x56555534 <main+23>:	add    ebx,0x1aa4
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+   0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+   0x5655554c <main+47>:	je     0x5655558e <main+113>
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd24c --> 0x56555601 (<__libc_csu_init+33>:	lea    eax,[ebx-0x100])
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x56555534 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x5655553a (<main+29>:	mov    DWORD PTR [ebp-0x10],0x0)
+EFLAGS: 0x206 (carry PARITY adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655552c <main+15>:	sub    esp,0x10
+   0x5655552f <main+18>:	call   0x56555420 <__x86.get_pc_thunk.bx>
+   0x56555534 <main+23>:	add    ebx,0x1aa4
+=> 0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+   0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+   0x5655554c <main+47>:	je     0x5655558e <main+113>
+   0x5655554e <main+49>:	sub    esp,0xc
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd24c --> 0x56555601 (<__libc_csu_init+33>:	lea    eax,[ebx-0x100])
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x5655553a in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x56555541 (<main+36>:	mov    DWORD PTR [ebp-0xc],0x1)
+EFLAGS: 0x206 (carry PARITY adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655552f <main+18>:	call   0x56555420 <__x86.get_pc_thunk.bx>
+   0x56555534 <main+23>:	add    ebx,0x1aa4
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+=> 0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+   0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+   0x5655554c <main+47>:	je     0x5655558e <main+113>
+   0x5655554e <main+49>:	sub    esp,0xc
+   0x56555551 <main+52>:	lea    eax,[ebx-0x1978]
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x56555601 (<__libc_csu_init+33>:	lea    eax,[ebx-0x100])
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x56555541 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x56555548 (<main+43>:	cmp    DWORD PTR [ebp-0x10],0x0)
+EFLAGS: 0x206 (carry PARITY adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555534 <main+23>:	add    ebx,0x1aa4
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+=> 0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+   0x5655554c <main+47>:	je     0x5655558e <main+113>
+   0x5655554e <main+49>:	sub    esp,0xc
+   0x56555551 <main+52>:	lea    eax,[ebx-0x1978]
+   0x56555557 <main+58>:	push   eax
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x56555548 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x5655554c (<main+47>:	je     0x5655558e <main+113>)
+EFLAGS: 0x246 (carry PARITY adjust ZERO sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+   0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+=> 0x5655554c <main+47>:	je     0x5655558e <main+113>
+ | 0x5655554e <main+49>:	sub    esp,0xc
+ | 0x56555551 <main+52>:	lea    eax,[ebx-0x1978]
+ | 0x56555557 <main+58>:	push   eax
+ | 0x56555558 <main+59>:	call   0x565553b0 <puts@plt>
+ |->   0x5655558e <main+113>:	sub    esp,0xc
+       0x56555591 <main+116>:	lea    eax,[ebx-0x1920]
+       0x56555597 <main+122>:	push   eax
+       0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+                                                                  JUMP is taken
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x5655554c in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x5655558e (<main+113>:	sub    esp,0xc)
+EFLAGS: 0x246 (carry PARITY adjust ZERO sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555584 <main+103>:	call   0x565553b0 <puts@plt>
+   0x56555589 <main+108>:	add    esp,0x10
+   0x5655558c <main+111>:	jmp    0x565555cc <main+175>
+=> 0x5655558e <main+113>:	sub    esp,0xc
+   0x56555591 <main+116>:	lea    eax,[ebx-0x1920]
+   0x56555597 <main+122>:	push   eax
+   0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+   0x5655559d <main+128>:	add    esp,0x10
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x5655558e in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0xf7fb2dd8 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+EIP: 0x56555591 (<main+116>:	lea    eax,[ebx-0x1920])
+EFLAGS: 0x292 (carry parity ADJUST zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555589 <main+108>:	add    esp,0x10
+   0x5655558c <main+111>:	jmp    0x565555cc <main+175>
+   0x5655558e <main+113>:	sub    esp,0xc
+=> 0x56555591 <main+116>:	lea    eax,[ebx-0x1920]
+   0x56555597 <main+122>:	push   eax
+   0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+   0x5655559d <main+128>:	add    esp,0x10
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0004| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0008| 0xffffd23c ("4UUV\001")
+0012| 0xffffd240 --> 0x1 
+0016| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0020| 0xffffd248 --> 0x0 
+0024| 0xffffd24c --> 0x1 
+0028| 0xffffd250 --> 0xffffd270 --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x56555591 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x565556b8 ("false")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+EIP: 0x56555597 (<main+122>:	push   eax)
+EFLAGS: 0x292 (carry parity ADJUST zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655558c <main+111>:	jmp    0x565555cc <main+175>
+   0x5655558e <main+113>:	sub    esp,0xc
+   0x56555591 <main+116>:	lea    eax,[ebx-0x1920]
+=> 0x56555597 <main+122>:	push   eax
+   0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+   0x5655559d <main+128>:	add    esp,0x10
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0004| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0008| 0xffffd23c ("4UUV\001")
+0012| 0xffffd240 --> 0x1 
+0016| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0020| 0xffffd248 --> 0x0 
+0024| 0xffffd24c --> 0x1 
+0028| 0xffffd250 --> 0xffffd270 --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x56555597 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x565556b8 ("false")
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xffffd294 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd230 --> 0x565556b8 ("false")
+EIP: 0x56555598 (<main+123>:	call   0x565553b0 <puts@plt>)
+EFLAGS: 0x292 (carry parity ADJUST zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655558e <main+113>:	sub    esp,0xc
+   0x56555591 <main+116>:	lea    eax,[ebx-0x1920]
+   0x56555597 <main+122>:	push   eax
+=> 0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+   0x5655559d <main+128>:	add    esp,0x10
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+   0x565555a6 <main+137>:	sub    esp,0xc
+Guessed arguments:
+arg[0]: 0x565556b8 ("false")
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd230 --> 0x565556b8 ("false")
+0004| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0008| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd23c ("4UUV\001")
+0016| 0xffffd240 --> 0x1 
+0020| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0024| 0xffffd248 --> 0x0 
+0028| 0xffffd24c --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x56555598 in main ()
+gdb-peda$ 
+false
+[----------------------------------registers-----------------------------------]
+EAX: 0x6 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd230 --> 0x565556b8 ("false")
+EIP: 0x5655559d (<main+128>:	add    esp,0x10)
+EFLAGS: 0x246 (carry PARITY adjust ZERO sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555591 <main+116>:	lea    eax,[ebx-0x1920]
+   0x56555597 <main+122>:	push   eax
+   0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+=> 0x5655559d <main+128>:	add    esp,0x10
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+   0x565555a6 <main+137>:	sub    esp,0xc
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd230 --> 0x565556b8 ("false")
+0004| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0008| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd23c ("4UUV\001")
+0016| 0xffffd240 --> 0x1 
+0020| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0024| 0xffffd248 --> 0x0 
+0028| 0xffffd24c --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x5655559d in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x6 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x565555a0 (<main+131>:	cmp    DWORD PTR [ebp-0xc],0x0)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555597 <main+122>:	push   eax
+   0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+   0x5655559d <main+128>:	add    esp,0x10
+=> 0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+   0x565555a6 <main+137>:	sub    esp,0xc
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+   0x565555af <main+146>:	push   eax
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+
+0x565555a0 in main ()
+gdb-peda$ [----------------------------------registers-----------------------------------]
+EAX: 0x6 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x565555a4 (<main+135>:	je     0x565555ba <main+157>)
+EFLAGS: 0x202 (carry parity adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x56555598 <main+123>:	call   0x565553b0 <puts@plt>
+   0x5655559d <main+128>:	add    esp,0x10
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+=> 0x565555a4 <main+135>:	je     0x565555ba <main+157>
+   0x565555a6 <main+137>:	sub    esp,0xc
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+   0x565555af <main+146>:	push   eax
+   0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+                                                              JUMP is NOT taken
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555a4 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x6 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x565555a6 (<main+137>:	sub    esp,0xc)
+EFLAGS: 0x202 (carry parity adjust zero sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655559d <main+128>:	add    esp,0x10
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+=> 0x565555a6 <main+137>:	sub    esp,0xc
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+   0x565555af <main+146>:	push   eax
+   0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+   0x565555b5 <main+152>:	add    esp,0x10
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555a6 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x6 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+EIP: 0x565555a9 (<main+140>:	lea    eax,[ebx-0x1918])
+EFLAGS: 0x292 (carry parity ADJUST zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555a0 <main+131>:	cmp    DWORD PTR [ebp-0xc],0x0
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+   0x565555a6 <main+137>:	sub    esp,0xc
+=> 0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+   0x565555af <main+146>:	push   eax
+   0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+   0x565555b5 <main+152>:	add    esp,0x10
+   0x565555b8 <main+155>:	jmp    0x565555cc <main+175>
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0004| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0008| 0xffffd23c ("4UUV\001")
+0012| 0xffffd240 --> 0x1 
+0016| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0020| 0xffffd248 --> 0x0 
+0024| 0xffffd24c --> 0x1 
+0028| 0xffffd250 --> 0xffffd270 --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555a9 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+EIP: 0x565555af (<main+146>:	push   eax)
+EFLAGS: 0x292 (carry parity ADJUST zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555a4 <main+135>:	je     0x565555ba <main+157>
+   0x565555a6 <main+137>:	sub    esp,0xc
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+=> 0x565555af <main+146>:	push   eax
+   0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+   0x565555b5 <main+152>:	add    esp,0x10
+   0x565555b8 <main+155>:	jmp    0x565555cc <main+175>
+   0x565555ba <main+157>:	sub    esp,0xc
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0004| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0008| 0xffffd23c ("4UUV\001")
+0012| 0xffffd240 --> 0x1 
+0016| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0020| 0xffffd248 --> 0x0 
+0024| 0xffffd24c --> 0x1 
+0028| 0xffffd250 --> 0xffffd270 --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555af in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ("false\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd230 --> 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+EIP: 0x565555b0 (<main+147>:	call   0x565553b0 <puts@plt>)
+EFLAGS: 0x292 (carry parity ADJUST zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555a6 <main+137>:	sub    esp,0xc
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+   0x565555af <main+146>:	push   eax
+=> 0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+   0x565555b5 <main+152>:	add    esp,0x10
+   0x565555b8 <main+155>:	jmp    0x565555cc <main+175>
+   0x565555ba <main+157>:	sub    esp,0xc
+   0x565555bd <main+160>:	lea    eax,[ebx-0x18f0]
+Guessed arguments:
+arg[0]: 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd230 --> 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+0004| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0008| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd23c ("4UUV\001")
+0016| 0xffffd240 --> 0x1 
+0020| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0024| 0xffffd248 --> 0x0 
+0028| 0xffffd24c --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555b0 in main ()
+gdb-peda$ 
+!!!!!!!!!!!!!ft!!!!!!!!!!!!!!!!!!!!!!!!
+[----------------------------------registers-----------------------------------]
+EAX: 0x28 ('(')
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>, "\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd230 --> 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+EIP: 0x565555b5 (<main+152>:	add    esp,0x10)
+EFLAGS: 0x246 (carry PARITY adjust ZERO sign trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555a9 <main+140>:	lea    eax,[ebx-0x1918]
+   0x565555af <main+146>:	push   eax
+   0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+=> 0x565555b5 <main+152>:	add    esp,0x10
+   0x565555b8 <main+155>:	jmp    0x565555cc <main+175>
+   0x565555ba <main+157>:	sub    esp,0xc
+   0x565555bd <main+160>:	lea    eax,[ebx-0x18f0]
+   0x565555c3 <main+166>:	push   eax
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd230 --> 0x565556c0 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>)
+0004| 0xffffd234 --> 0x56556fd8 --> 0x1ee0 
+0008| 0xffffd238 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0012| 0xffffd23c ("4UUV\001")
+0016| 0xffffd240 --> 0x1 
+0020| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0024| 0xffffd248 --> 0x0 
+0028| 0xffffd24c --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555b5 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x28 ('(')
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>, "\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x565555b8 (<main+155>:	jmp    0x565555cc <main+175>)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555af <main+146>:	push   eax
+   0x565555b0 <main+147>:	call   0x565553b0 <puts@plt>
+   0x565555b5 <main+152>:	add    esp,0x10
+=> 0x565555b8 <main+155>:	jmp    0x565555cc <main+175>
+ | 0x565555ba <main+157>:	sub    esp,0xc
+ | 0x565555bd <main+160>:	lea    eax,[ebx-0x18f0]
+ | 0x565555c3 <main+166>:	push   eax
+ | 0x565555c4 <main+167>:	call   0x565553b0 <puts@plt>
+ |->   0x565555cc <main+175>:	mov    eax,0x0
+       0x565555d1 <main+180>:	lea    esp,[ebp-0x8]
+       0x565555d4 <main+183>:	pop    ecx
+       0x565555d5 <main+184>:	pop    ebx
+                                                                  JUMP is taken
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555b8 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x28 ('(')
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>, "\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x565555cc (<main+175>:	mov    eax,0x0)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555c3 <main+166>:	push   eax
+   0x565555c4 <main+167>:	call   0x565553b0 <puts@plt>
+   0x565555c9 <main+172>:	add    esp,0x10
+=> 0x565555cc <main+175>:	mov    eax,0x0
+   0x565555d1 <main+180>:	lea    esp,[ebp-0x8]
+   0x565555d4 <main+183>:	pop    ecx
+   0x565555d5 <main+184>:	pop    ebx
+   0x565555d6 <main+185>:	pop    ebp
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555cc in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>, "\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd240 --> 0x1 
+EIP: 0x565555d1 (<main+180>:	lea    esp,[ebp-0x8])
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555c4 <main+167>:	call   0x565553b0 <puts@plt>
+   0x565555c9 <main+172>:	add    esp,0x10
+   0x565555cc <main+175>:	mov    eax,0x0
+=> 0x565555d1 <main+180>:	lea    esp,[ebp-0x8]
+   0x565555d4 <main+183>:	pop    ecx
+   0x565555d5 <main+184>:	pop    ebx
+   0x565555d6 <main+185>:	pop    ebp
+   0x565555d7 <main+186>:	lea    esp,[ecx-0x4]
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd240 --> 0x1 
+0004| 0xffffd244 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0008| 0xffffd248 --> 0x0 
+0012| 0xffffd24c --> 0x1 
+0016| 0xffffd250 --> 0xffffd270 --> 0x1 
+0020| 0xffffd254 --> 0x0 
+0024| 0xffffd258 --> 0x0 
+0028| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555d1 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0x56558160 ('!' <repeats 13 times>, "ft", '!' <repeats 24 times>, "\n")
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd250 --> 0xffffd270 --> 0x1 
+EIP: 0x565555d4 (<main+183>:	pop    ecx)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555c9 <main+172>:	add    esp,0x10
+   0x565555cc <main+175>:	mov    eax,0x0
+   0x565555d1 <main+180>:	lea    esp,[ebp-0x8]
+=> 0x565555d4 <main+183>:	pop    ecx
+   0x565555d5 <main+184>:	pop    ebx
+   0x565555d6 <main+185>:	pop    ebp
+   0x565555d7 <main+186>:	lea    esp,[ecx-0x4]
+   0x565555da <main+189>:	ret
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd250 --> 0xffffd270 --> 0x1 
+0004| 0xffffd254 --> 0x0 
+0008| 0xffffd258 --> 0x0 
+0012| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0016| 0xffffd260 --> 0xf7fb1000 --> 0x1d7d8c 
+0020| 0xffffd264 --> 0xf7fb1000 --> 0x1d7d8c 
+0024| 0xffffd268 --> 0x0 
+0028| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555d4 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x56556fd8 --> 0x1ee0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd254 --> 0x0 
+EIP: 0x565555d5 (<main+184>:	pop    ebx)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555cc <main+175>:	mov    eax,0x0
+   0x565555d1 <main+180>:	lea    esp,[ebp-0x8]
+   0x565555d4 <main+183>:	pop    ecx
+=> 0x565555d5 <main+184>:	pop    ebx
+   0x565555d6 <main+185>:	pop    ebp
+   0x565555d7 <main+186>:	lea    esp,[ecx-0x4]
+   0x565555da <main+189>:	ret    
+   0x565555db:	xchg   ax,ax
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd254 --> 0x0 
+0004| 0xffffd258 --> 0x0 
+0008| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0012| 0xffffd260 --> 0xf7fb1000 --> 0x1d7d8c 
+0016| 0xffffd264 --> 0xf7fb1000 --> 0x1d7d8c 
+0020| 0xffffd268 --> 0x0 
+0024| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0028| 0xffffd270 --> 0x1 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555d5 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0xffffd258 --> 0x0 
+ESP: 0xffffd258 --> 0x0 
+EIP: 0x565555d6 (<main+185>:	pop    ebp)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555d1 <main+180>:	lea    esp,[ebp-0x8]
+   0x565555d4 <main+183>:	pop    ecx
+   0x565555d5 <main+184>:	pop    ebx
+=> 0x565555d6 <main+185>:	pop    ebp
+   0x565555d7 <main+186>:	lea    esp,[ecx-0x4]
+   0x565555da <main+189>:	ret    
+   0x565555db:	xchg   ax,ax
+   0x565555dd:	xchg   ax,ax
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd258 --> 0x0 
+0004| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0008| 0xffffd260 --> 0xf7fb1000 --> 0x1d7d8c 
+0012| 0xffffd264 --> 0xf7fb1000 --> 0x1d7d8c 
+0016| 0xffffd268 --> 0x0 
+0020| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0024| 0xffffd270 --> 0x1 
+0028| 0xffffd274 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555d6 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0x0 
+ESP: 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+EIP: 0x565555d7 (<main+186>:	lea    esp,[ecx-0x4])
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555d4 <main+183>:	pop    ecx
+   0x565555d5 <main+184>:	pop    ebx
+   0x565555d6 <main+185>:	pop    ebp
+=> 0x565555d7 <main+186>:	lea    esp,[ecx-0x4]
+   0x565555da <main+189>:	ret    
+   0x565555db:	xchg   ax,ax
+   0x565555dd:	xchg   ax,ax
+   0x565555df:	nop
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd25c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0004| 0xffffd260 --> 0xf7fb1000 --> 0x1d7d8c 
+0008| 0xffffd264 --> 0xf7fb1000 --> 0x1d7d8c 
+0012| 0xffffd268 --> 0x0 
+0016| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0020| 0xffffd270 --> 0x1 
+0024| 0xffffd274 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0028| 0xffffd278 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555d7 in main ()
+gdb-peda$ 
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0x0 
+ESP: 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+EIP: 0x565555da (<main+189>:	ret)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x565555d5 <main+184>:	pop    ebx
+   0x565555d6 <main+185>:	pop    ebp
+   0x565555d7 <main+186>:	lea    esp,[ecx-0x4]
+=> 0x565555da <main+189>:	ret    
+   0x565555db:	xchg   ax,ax
+   0x565555dd:	xchg   ax,ax
+   0x565555df:	nop
+   0x565555e0 <__libc_csu_init>:	push   ebp
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0004| 0xffffd270 --> 0x1 
+0008| 0xffffd274 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0012| 0xffffd278 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0016| 0xffffd27c --> 0xffffd294 --> 0x0 
+0020| 0xffffd280 --> 0x1 
+0024| 0xffffd284 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0028| 0xffffd288 --> 0xf7fb1000 --> 0x1d7d8c 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+0x565555da in main ()
+gdb-peda$ b *0x5655554c
+Breakpoint 2 at 0x5655554c
+gdb-peda$ jump *0x5655554c
+Continuing at 0x5655554c.
+[----------------------------------registers-----------------------------------]
+EAX: 0x0 
+EBX: 0x0 
+ECX: 0xffffd270 --> 0x1 
+EDX: 0xf7fb2890 --> 0x0 
+ESI: 0xf7fb1000 --> 0x1d7d8c 
+EDI: 0x0 
+EBP: 0x0 
+ESP: 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+EIP: 0x5655554c (<main+47>:	je     0x5655558e <main+113>)
+EFLAGS: 0x282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+   0x5655553a <main+29>:	mov    DWORD PTR [ebp-0x10],0x0
+   0x56555541 <main+36>:	mov    DWORD PTR [ebp-0xc],0x1
+   0x56555548 <main+43>:	cmp    DWORD PTR [ebp-0x10],0x0
+=> 0x5655554c <main+47>:	je     0x5655558e <main+113>
+   0x5655554e <main+49>:	sub    esp,0xc
+   0x56555551 <main+52>:	lea    eax,[ebx-0x1978]
+   0x56555557 <main+58>:	push   eax
+   0x56555558 <main+59>:	call   0x565553b0 <puts@plt>
+                                                              JUMP is NOT taken
+[------------------------------------stack-------------------------------------]
+0000| 0xffffd26c --> 0xf7df1f21 (<__libc_start_main+241>:	add    esp,0x10)
+0004| 0xffffd270 --> 0x1 
+0008| 0xffffd274 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0012| 0xffffd278 --> 0xffffd30c --> 0xffffd531 ("CLUTTER_IM_MODULE=xim")
+0016| 0xffffd27c --> 0xffffd294 --> 0x0 
+0020| 0xffffd280 --> 0x1 
+0024| 0xffffd284 --> 0xffffd304 --> 0xffffd4ff ("/home/al17111/work/research/playground/gdb/test32")
+0028| 0xffffd288 --> 0xf7fb1000 --> 0x1d7d8c 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+
+Breakpoint 2, 0x5655554c in main ()
+gdb-peda$ n
+Cannot access memory at address 0xfffffff8
+gdb-peda$ 

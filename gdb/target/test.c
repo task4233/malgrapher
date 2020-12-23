@@ -1,3 +1,7 @@
+char resStr() {
+  return 'a';
+}
+
 int main() {
   int flg=0, flg2=1;
   if (flg) {
@@ -15,5 +19,5 @@ int main() {
       puts("!!!!!!!!!!!!!ff!!!!!!!!!!!!!!!!!!!!!!!!");
     }
   }
-  return 0;
+  return 1;
 }

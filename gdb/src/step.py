@@ -5,10 +5,16 @@ filename='./target/test'
 breakpoints = []
 
 class Breakpoint:
-    def __init__(self, addr, op, status=False):
-        self.addr = addr
+    def __init__(self, line):
+        words = line.split()
+        # format
+        # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
+        from_addr = words[1]
+        op = words[3]
+        args = words[4:]
+        self.from_addr = from_addr
         self.op = op
-        self.status = status
+        self.args = args
 
     def true_eflag_status(self):
         if self.op=="je":
@@ -39,12 +45,8 @@ def exec_with_status(status):
             break
         
         # format
-        # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>            
-        words = line.split()
-        from_addr = words[1]
-        op = words[3]
-        arg = words[4:]
-        bi = Breakpoint(from_addr, op)
+        # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
+        # breakpoint_information = Breakpoint(line)
 
     # プログラムを確実に終了させる
     gdb.execute('quit')
@@ -71,16 +73,11 @@ def enum_jumps():
         # j*となるオペコードがあったらアドレスを覚えておく
         if '\tj' in line:
             # format
-            # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106> 
-            # lineを入れたらsplitして全てを管理してくれるクラスを作る           
-            words = line.split()
-            from_addr = words[1]
-            op = words[3]
-            arg = words[4:]
-            bi = Breakpoint(from_addr, op)
-            breakpoints.append(bi)
+            # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
+            breakpoint_information = Breakpoint(line)
+            breakpoints.append(breakpoint_information)
             
-            print("fr addr: " + " ".join(words[1:]))
+            print("fr addr: " + " ".join(line.split()[1:]))
 
     print(f'breakpoints: ({len(breakpoints)})')
     for bp in breakpoints:

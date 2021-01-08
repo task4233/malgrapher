@@ -4,6 +4,14 @@ import itertools
 filename='./target/test'
 breakpoints = []
 
+class GdbCtx:
+    def __init__(self, gdb):
+        self.gdb = gdb
+        self.gdb.execute('file ' + filename)
+    
+    def __del__(self):
+        del self.gdb
+
 class Breakpoint:
     def __init__(self, line):
         words = line.split()
@@ -16,12 +24,18 @@ class Breakpoint:
         self.op = op
         self.args = args
 
+    def update_carry_flag(self, status):
+        return (1<<0) & status
+
+    def update_zero_flag(self, status):
+        return (1<<6) & status
+
+    def update_sign_flag(self, status):
+        return (1<<7) & status
+
     def true_eflag_status(self):
         if self.op=="je":
             return "1<<6"
-
-    def __str__(self):
-        return f'addr: {self.addr}, op: {self.op}, status: {self.status}'
 
 def exec_with_status(status):
     gdb.execute('file ' + filename)
@@ -53,8 +67,7 @@ def exec_with_status(status):
     return
     
 def enum_jumps():
-    gdb.execute('file ' + filename)
-
+    idx = 0
     b = gdb.execute('b main')
     gdb.execute('run')
     
@@ -68,33 +81,42 @@ def enum_jumps():
 
         # leaveだったら抜ける
         if 'leave' in line:
+            gdb.execute("set $eflags |= (1 << 6)")
+            gdb.execute("j *" + breakpoints[idx].from_addr)
+            idx+=1
             break
 
+        # 最初はtrueの状態から読みだす
+        # stackからpopされたときはfalseの条件に変える
         # j*となるオペコードがあったらアドレスを覚えておく
         if '\tj' in line:
             # format
             # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
             breakpoint_information = Breakpoint(line)
             breakpoints.append(breakpoint_information)
-            
+
+            gdb.execute("b *" + breakpoint_information.from_addr)
+            gdb.execute("set $eflags &= ~(1 << 6)")
+
             print("fr addr: " + " ".join(line.split()[1:]))
 
     print(f'breakpoints: ({len(breakpoints)})')
     for bp in breakpoints:
         print(str(bp))
-
-    # プログラムを確実に終了させる
-    gdb.execute('quit')
     return
 
 
 if __name__ == "__main__":
+    gdbctx = GdbCtx(gdb)
+
     enum_jumps()
 
     out = gdb.execute('info breakpoints', to_string=True)
-    print(out)
+    print("[INFO] breakpoints: ", out)
+
+    # プログラムを 確実に終了させる
+    gdb.execute('quit')
 
     # bit全探索
-    for status in range(2 ** len(breakpoints)):
-        exec_with_status(status)
-    
+    """ for status in range(2 ** len(breakpoints)):
+        exec_with_status(status) """

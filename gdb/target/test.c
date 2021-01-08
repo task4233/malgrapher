@@ -1,23 +1,19 @@
-char resStr() {
-  return 'a';
-}
-
 int main() {
   int flg=0, flg2=1;
   if (flg) {
     puts("true");
     if (flg2) {
-      puts("!!!!!!!!!!!!!tt!!!!!!!!!!!!!!!!!!!!!!!!");
+      puts("tt");
     } else {
-      puts("!!!!!!!!!!!!!tf!!!!!!!!!!!!!!!!!!!!!!!!");
+      puts("tf");
     }
   } else {
     puts("false");
     if (flg2) {
-      puts("!!!!!!!!!!!!!ft!!!!!!!!!!!!!!!!!!!!!!!!");
+      puts("ft");
     } else {
-      puts("!!!!!!!!!!!!!ff!!!!!!!!!!!!!!!!!!!!!!!!");
+      puts("ff");
     }
   }
-  return 1;
+  return 0;
 }

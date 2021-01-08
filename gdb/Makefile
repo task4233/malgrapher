@@ -8,9 +8,8 @@ gen:
 
 .PHONY:test
 test:
-	sed -i -e "s/import gdb/# import gdb/g" ./src/step.py
-	python3 -m unittest src/test_step.py
-	sed -i -e "s/# import gdb/import gdb/g" ./src/step.py
+	coverage run --source ./makecfg -m unittest discover ./tests
+	coverage report -m
 
 .PHONY:run
 run:

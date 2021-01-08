@@ -1,18 +1,17 @@
 import unittest
 from .step import Breakpoint
 
-class BreakpointTest(unittest.TestCase):
+class TestBreakpoint(unittest.TestCase):
     def setUp(self):
         print("setup")
         # => 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>
         self.line = "=> 0x555555554694 <main+90>:	je     0x5555555546a4 <main+106>"
         self.bp = Breakpoint(self.line)
-        pass
 
     def tearDown(self):
         print("tearDown")
+        del self.line
         del self.bp
-        pass
 
     def test_split_output(self):
         """ test constructor for Breakpoint """

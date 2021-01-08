@@ -2,7 +2,7 @@ import gdb
 
 filename='test'
 
-gdb.execute('set debug target 1')
+# gdb.execute('set debug target 1')
 gdb.execute('file ' + filename)
 b = gdb.execute('b main')
 gdb.execute('run')

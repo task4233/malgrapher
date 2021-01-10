@@ -5,6 +5,7 @@ class Config:
     def __init__(self, target_file_path, get_stop_addr_script_file_path="./gdb_scripts/get_stop_addr.py"):
         self.target_file_path = target_file_path
         self.get_stop_addr_script_file_path = get_stop_addr_script_file_path
+        self.ENV = os.environ['ENV']
     
     # objdumpでjmp系命令を全て取得
     def get_jmp_addrs(self):
@@ -53,13 +54,13 @@ class Config:
     # gdb実行時での止まるアドレスを取得
     def get_stop_addr_gdb(self):
         with open(os.devnull, 'w') as nu:
-            init_args = ['rm', '-f', 'tmp.out']
+            init_args = ['rm', '-f', 'tmp_stop_addrs.out']
             subprocess.call(init_args, stdout=nu)
 
             gdb_args = ['gdb', '-q', '-x', self.get_stop_addr_script_file_path, self.target_file_path]
             subprocess.call(gdb_args, stdout=nu)
 
-        filter_cut_args = ['cut', '-d', ' ', '-f', '2', 'tmp.out']
+        filter_cut_args = ['cut', '-d', ' ', '-f', '2', 'tmp_stop_addrs.out']
         addr = subprocess.check_output(filter_cut_args)
         return addr.decode('utf8').strip('\n')
 

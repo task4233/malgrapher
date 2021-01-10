@@ -1,3 +1,6 @@
+ENV_TEST_FILE := .env.test
+ENV_TEST := $(shell cat $(ENV_TEST_FILE))
+
 .PHONY:gen32
 gen32:
 	gcc -m32 -o ./target/test32 ./target/test.c
@@ -8,7 +11,7 @@ gen:
 
 .PHONY:test
 test:
-	coverage run --source ./makecfg -m unittest discover ./tests
+	$(ENV_TEST) coverage run --source ./makecfg -m unittest discover ./tests
 	coverage report -m
 
 .PHONY:run

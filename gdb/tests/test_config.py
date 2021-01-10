@@ -1,12 +1,22 @@
 import unittest
 from makecfg.config import Config
 
+
 class TestConfig(unittest.TestCase):
     """test methods for Config class
     """
+
     def setUp(self):
         target_file_path = './target/test'
         self.config = Config(target_file_path)
+
+    def test_environ(self):
+        """test environ ENV is test
+        """
+
+        got = self.config.ENV
+        want = 'test'
+        self.assertEqual(got, want)
 
     def test_get_jmp_addrs(self):
         """test method for get_jmp_addrs
@@ -46,9 +56,11 @@ class TestConfig(unittest.TestCase):
         """
 
         got = self.config.get_jmp_runtime_addrs()
-        want = ['0x555555554654','0x555555554666','0x555555554674', '0x555555554682', '0x555555554694', '0x5555555546a2']
+        want = ['0x555555554654', '0x555555554666', '0x555555554674',
+                '0x555555554682', '0x555555554694', '0x5555555546a2']
         self.assertCountEqual(want, got)
         self.assertListEqual(want, got)
+
 
 if __name__ == '__main__':
     unittest.main()

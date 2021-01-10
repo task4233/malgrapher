@@ -1,1 +1,7 @@
-=> 0x55555555463e <main+4>:	sub    rsp,0x10
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000555555554654 
+2       breakpoint     keep y   0x0000555555554666 
+3       breakpoint     keep y   0x0000555555554674 
+4       breakpoint     keep y   0x0000555555554682 
+5       breakpoint     keep y   0x0000555555554694 
+6       breakpoint     keep y   0x00005555555546a2 

@@ -2,7 +2,7 @@ import unittest
 from makecfg.config import Config
 
 class TestConfig(unittest.TestCase):
-    """test methods of init.py
+    """test methods for Config class
     """
     def setUp(self):
         target_file_path = './target/test'

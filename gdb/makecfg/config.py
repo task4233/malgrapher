@@ -1,4 +1,4 @@
-import subprocess
+import subprocess, os
 
 class Config:
     # init
@@ -52,14 +52,15 @@ class Config:
 
     # gdb実行時での止まるアドレスを取得
     def get_stop_addr_gdb(self):
-        init_args = ['rm', 'tmp.out']
-        subprocess.call(init_args)
+        with open(os.devnull, 'w') as nu:
+            init_args = ['rm', '-f', 'tmp.out']
+            subprocess.call(init_args, stdout=nu)
 
-        gdb_args = ['gdb', '-q', '-x', self.get_stop_addr_script_file_path, self.target_file_path]
-        subprocess.call(gdb_args)
+            gdb_args = ['gdb', '-q', '-x', self.get_stop_addr_script_file_path, self.target_file_path]
+            subprocess.call(gdb_args, stdout=nu)
 
-        filter_cat_args = ['cut', '-d', ' ', '-f', '2', 'tmp.out']
-        addr = subprocess.check_output(filter_cat_args)
+        filter_cut_args = ['cut', '-d', ' ', '-f', '2', 'tmp.out']
+        addr = subprocess.check_output(filter_cut_args)
         return addr.decode('utf8').strip('\n')
 
     # objdumpとgdb実行時のoffsetを取得

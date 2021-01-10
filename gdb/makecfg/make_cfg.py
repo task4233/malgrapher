@@ -21,6 +21,7 @@ class MakeCFG:
         self.config = Config(self.target_file_path)
         self.make_breakpoints_file_path = "./gdb_scripts/make_breakpoints.py"
         self.get_registers_file_path = "./gdb_scripts/get_registers.py"
+        self.make_cfg_file_path = "./gdb_scripts/make_cfg.py"
 
     def create_breakpoints(self):
         # あまり良くないけどファイルで渡す
@@ -47,8 +48,14 @@ class MakeCFG:
         # 先頭は空
         return res[1:-1]
     
-    def makecfg(self):
-        pass
+    def make_cfg(self):
+        with open(os.devnull, 'w') as nu:
+            init_args = ['rm', '-f', 'tmp_make_cfg.out']
+            subprocess.call(init_args, stdout=nu)
+            
+            gdb_args = ['gdb', '-q', '-x', self.make_cfg_file_path, self.target_file_path]
+            subprocess.call(gdb_args, stdout=nu)
+        return None
 
     def get_registers(self):
         with open(os.devnull, 'w') as nu:

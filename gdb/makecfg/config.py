@@ -6,7 +6,28 @@ class Config:
         self.target_file_path = target_file_path
         self.get_stop_addr_script_file_path = get_stop_addr_script_file_path
         self.ENV = os.environ['ENV']
-    
+        self.offset = self.get_offset_with_objdump_and_gdb()
+
+    # objdumpでret系命令を全て取得
+    def get_ret_addrs(self):
+        objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
+        proc1 = self.__subprocess_helper(objdump_args)
+
+        filter_jump_args = ['grep', 'ret']
+        proc2 = self.__subprocess_helper(filter_jump_args, proc1.stdout)
+        proc1.stdout.close()
+
+        filter_cut_args = ['cut', '-d', ':', '-f', '1']
+        proc1 = self.__subprocess_helper(filter_cut_args, proc2.stdout)
+        proc2.stdout.close()
+
+        output = proc1.communicate()[0].decode('utf8')
+        ret_addrs = []
+        if '\n' in output:
+            ret_addrs = output.split('\n')[:-1]
+            ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
+        return ret_addrs
+
     # objdumpでjmp系命令を全て取得
     def get_jmp_addrs(self):
         objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
@@ -70,9 +91,14 @@ class Config:
 
     # breakpointを立てるアドレスを再計算(offsetを考慮する)
     def get_jmp_runtime_addrs(self):
-        offset = self.get_offset_with_objdump_and_gdb()
         addrs = self.get_jmp_addrs()
-        addrs = [hex(int(addr, 0) + int(offset, 0)) for addr in addrs]
+        addrs = [hex(int(addr, 0) + int(self.offset, 0)) for addr in addrs]
+        return addrs
+    
+    # breakpointを立てるアドレスを再計算
+    def get_ret_runtime_addrs(self):
+        addrs = self.get_ret_addrs()
+        addrs = [hex(int(addr, 0) + int(self.offset, 0)) for addr in addrs]
         return addrs
 
     def __subprocess_helper(self, args, _stdin=None, _stdout=subprocess.PIPE):

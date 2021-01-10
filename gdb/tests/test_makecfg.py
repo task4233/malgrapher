@@ -56,3 +56,11 @@ class TestMakeCFG(unittest.TestCase):
                 'fs': '0x0',
                 'gs': '0x0'}
         self.assertDictEqual(got, want)
+
+    def test_make_cfg(self):
+        """test method make_cfg
+        """
+        pass
+        # got = self.makecfg.make_cfg()
+        #want = None
+        #self.assertEqual(want, got)

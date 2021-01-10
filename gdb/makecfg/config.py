@@ -18,7 +18,7 @@ class Config:
         proc1.stdout.close()
 
         filter_cut_args = ['cut', '-d', ':', '-f', '1']
-        proc1 = self.__subprocess_helper(filter_cut_args, proc2.stdout)
+        proc1 = self.__subprocess_helper(filter_cut_args, proc1.stdout)
         proc2.stdout.close()
 
         output = proc1.communicate()[0].decode('utf8')

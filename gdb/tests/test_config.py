@@ -25,6 +25,7 @@ class TestConfig(unittest.TestCase):
 
         got = self.config.get_ret_addrs()
         want = ['0x4fe', '0x591', '0x5e1', '0x620', '0x628', '0x6b6', '0x724', '0x730', '0x73c']
+        print("ret_addr: ", got)
         self.assertCountEqual(want, got)
         self.assertListEqual(want, got)
 
@@ -76,6 +77,7 @@ class TestConfig(unittest.TestCase):
         """
 
         got = self.config.get_ret_runtime_addrs()
+        print("ret_runtime: ", got)
         want = ['0x5555555544fe', '0x555555554591', '0x5555555545e1', '0x555555554620',
                 '0x555555554628', '0x5555555546b6', '0x555555554724', '0x555555554730', '0x55555555473c']
         self.assertCountEqual(want, got)

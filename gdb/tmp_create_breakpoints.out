@@ -5,3 +5,12 @@ Num     Type           Disp Enb Address            What
 4       breakpoint     keep y   0x0000555555554682 
 5       breakpoint     keep y   0x0000555555554694 
 6       breakpoint     keep y   0x00005555555546a2 
+7       breakpoint     keep y   0x00005555555544fe 
+8       breakpoint     keep y   0x0000555555554591 
+9       breakpoint     keep y   0x00005555555545e1 
+10      breakpoint     keep y   0x0000555555554620 
+11      breakpoint     keep y   0x0000555555554628 
+12      breakpoint     keep y   0x00005555555546b6 
+13      breakpoint     keep y   0x0000555555554724 
+14      breakpoint     keep y   0x0000555555554730 
+15      breakpoint     keep y   0x000055555555473c 

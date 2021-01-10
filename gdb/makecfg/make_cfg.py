@@ -27,6 +27,7 @@ class MakeCFG:
         # あまり良くないけどファイルで渡す
         with open('breakpoint_addrs.dat', 'w') as f:
             addrs = self.config.get_jmp_runtime_addrs()
+            addrs.extend(self.config.get_ret_runtime_addrs())
             for addr in addrs:
                 f.write(addr + '\n')
         
@@ -54,7 +55,7 @@ class MakeCFG:
             subprocess.call(init_args, stdout=nu)
             
             gdb_args = ['gdb', '-q', '-x', self.make_cfg_file_path, self.target_file_path]
-            subprocess.call(gdb_args, stdout=nu)
+            subprocess.call(gdb_args)
         return None
 
     def get_registers(self):

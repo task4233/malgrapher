@@ -64,8 +64,6 @@ def make_cfg():
         gdb.execute('n')
         # => 0x55555555463e <main+4>:     sub    rsp,0x10
         info = GDBMgr(gdb.execute('x/i $pc', to_string=True))
-        print("opcode : ", info.opcode)
-        print("rawcode: ", info.raw)
         
         if 'ret' in info.opcode:
             break
@@ -73,5 +71,7 @@ def make_cfg():
         # jmp系命令の時
         if 'j' in info.opcode:
             cfg.append(CFG())
+    
+    gdb.execute('quit')
 
 make_cfg()

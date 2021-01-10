@@ -17,12 +17,8 @@ class TestMakeCFG(unittest.TestCase):
         """
 
         got = self.makecfg.create_breakpoints()
-        want = ['0x0000555555554654',
-                '0x0000555555554666',
-                '0x0000555555554674',
-                '0x0000555555554682',
-                '0x0000555555554694',
-                '0x00005555555546a2']
+        want = ['0x0000555555554654', '0x0000555555554666', '0x0000555555554674', '0x0000555555554682', '0x0000555555554694', '0x00005555555546a2', '0x00005555555544fe',
+                '0x0000555555554591', '0x00005555555545e1', '0x0000555555554620', '0x0000555555554628', '0x00005555555546b6', '0x0000555555554724', '0x0000555555554730', '0x000055555555473c']
         self.assertCountEqual(want, got)
         self.assertListEqual(want, got)
 
@@ -60,7 +56,6 @@ class TestMakeCFG(unittest.TestCase):
     def test_make_cfg(self):
         """test method make_cfg
         """
-        pass
-        # got = self.makecfg.make_cfg()
-        #want = None
-        #self.assertEqual(want, got)
+        got = self.makecfg.make_cfg()
+        want = None
+        self.assertEqual(want, got)

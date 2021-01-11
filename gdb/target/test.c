@@ -1,18 +1,18 @@
 int main() {
   int flg=0, flg2=1;
   if (flg) {
-    puts("true");
+    puts("TRUE");
     if (flg2) {
-      puts("tt");
+      puts("TT");
     } else {
-      puts("tf");
+      puts("TF");
     }
   } else {
-    puts("false");
+    puts("fALSE");
     if (flg2) {
-      puts("ft");
+      puts("FT");
     } else {
-      puts("ff");
+      puts("FF");
     }
   }
   return 0;

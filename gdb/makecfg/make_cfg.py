@@ -26,8 +26,8 @@ class MakeCFG:
     def create_breakpoints(self):
         # あまり良くないけどファイルで渡す
         with open('breakpoint_addrs.dat', 'w') as f:
-            addrs = self.config.get_jmp_runtime_addrs()
-            addrs.extend(self.config.get_ret_runtime_addrs())
+            addrs = self.config.get_func_runtime_addrs('main')
+            # addrs.extend(self.config.get_ret_runtime_addrs())
             for addr in addrs:
                 f.write(addr + '\n')
         
@@ -46,6 +46,7 @@ class MakeCFG:
         proc1.stdout.close()
 
         res = proc2.communicate()[0].decode('utf8').split('\n')
+        # print(res[1:-1])
         # 先頭は空
         return res[1:-1]
     
@@ -55,7 +56,7 @@ class MakeCFG:
             subprocess.call(init_args, stdout=nu)
             
             gdb_args = ['gdb', '-q', '-x', self.make_cfg_file_path, self.target_file_path]
-            subprocess.call(gdb_args)
+            subprocess.call(gdb_args, stdout=nu)
         return None
 
     def get_registers(self):

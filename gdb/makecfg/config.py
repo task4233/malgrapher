@@ -8,6 +8,22 @@ class Config:
         self.ENV = os.environ['ENV']
         self.offset = self.get_offset_with_objdump_and_gdb()
 
+    # gdbでmainの全てにbreakpointを立てる
+    def get_func_addrs(self, func_name):
+        gdb_args = ['gdb', '-batch', '-ex', 'file ' + self.target_file_path, '-ex', 'disassemble ' + func_name]
+        proc1 = self.__subprocess_helper(gdb_args)
+
+        filter_awk_args = ['awk', '{print $1}']
+        proc2 = self.__subprocess_helper(filter_awk_args, proc1.stdout)
+        proc1.stdout.close()
+
+        output = proc2.communicate()[0].decode('utf8')
+        ret_addrs = []
+        if '\n' in output:
+            ret_addrs = output.split('\n')[1:-2]
+            ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
+        return ret_addrs
+
     # objdumpでret系命令を全て取得
     def get_ret_addrs(self):
         objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
@@ -18,7 +34,7 @@ class Config:
         proc1.stdout.close()
 
         filter_cut_args = ['cut', '-d', ':', '-f', '1']
-        proc1 = self.__subprocess_helper(filter_cut_args, proc1.stdout)
+        proc1 = self.__subprocess_helper(filter_cut_args, proc2.stdout)
         proc2.stdout.close()
 
         output = proc1.communicate()[0].decode('utf8')
@@ -79,7 +95,7 @@ class Config:
             subprocess.call(init_args, stdout=nu)
 
             gdb_args = ['gdb', '-q', '-x', self.get_stop_addr_script_file_path, self.target_file_path]
-            subprocess.call(gdb_args, stdout=nu)
+            subprocess.call(gdb_args)
 
         filter_cut_args = ['cut', '-d', ' ', '-f', '2', 'tmp_stop_addrs.out']
         addr = subprocess.check_output(filter_cut_args)
@@ -88,6 +104,12 @@ class Config:
     # objdumpとgdb実行時のoffsetを取得
     def get_offset_with_objdump_and_gdb(self):
         return hex(int(self.get_stop_addr_gdb(), 0) - int(self.get_stop_addr_objdump(), 0))
+
+    # breakpointを立てるアドレスを再計算
+    def get_func_runtime_addrs(self, func_name):
+        addrs = self.get_func_addrs(func_name)
+        addrs = [hex(int(addr, 0) + int(self.offset, 0)) for addr in addrs]
+        return addrs  
 
     # breakpointを立てるアドレスを再計算(offsetを考慮する)
     def get_jmp_runtime_addrs(self):

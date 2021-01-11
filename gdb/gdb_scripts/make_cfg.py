@@ -2,8 +2,6 @@ import gdb
 from collections import deque
 
 # from make_breakpoints.py
-
-
 def create_breakpoints():
     addrs = []
     with open('breakpoint_addrs.dat', 'r') as f:
@@ -12,10 +10,6 @@ def create_breakpoints():
         gdb.execute('b *' + addr)
 
 # from make_cfg.py
-
-
-
-
 class Register:
     def __init__(self, regs):
         self.regs = {}
@@ -89,7 +83,7 @@ class GDBMgr:
         tmp = line.split(' ')
         tmp = [t for t in tmp if t != '']
         # tmp:  ['0x555555554694', '<main+90>:\tje', '0x5555555546a4', '<main+106>\n']
-        print("tmp:", tmp)
+        # print("tmp:", tmp)
         self.addr = tmp[0]
         self.opcode = tmp[1][tmp[1].rfind('\t')+1:]
         self.args = tmp[1:]
@@ -139,20 +133,37 @@ def make_cfg():
     stack = []
 
     # 実行
+    gdb.execute("set logging file log.out")
+    gdb.execute("set logging on")
     gdb.execute('run')
     gdb.execute('info breakpoints')
 
     while True:
+        print("stack=", stack)
         gdb.execute('n')
         # => 0x55555555463e <main+4>:     sub    rsp,0x10
         lines = gdb.execute('x/2i $rip', to_string=True).split('\n')
-        print(lines)
         lines[0] = lines[0][3:]  # delete =>
 
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
         [node.set_lines(line.addr, line) for line in lines]
+        print("lines: ", lines[0].opcode)
         # レジスタ保存
         lines[0].reg = get_registers()
+
+        """ if int(lines[0].addr, 0) >= int(ub_addr, 0):
+            ub_addr = lines[0].addr
+            # 追い付いてしまった時
+            # スタックトップの条件を逆にして実行
+            if len(stack) > 0:
+                (restore, status) = stack.pop()
+                restore_registers(restore.regs)
+                update_eflags(restore.opcode, not(status))
+                # print("restore" + restore.raw)
+                gdb.execute("j *" + restore.addr)
+                continue
+            gdb.execute('info breakpoints')
+            break """
 
         if 'ret' in lines[1].opcode:
             if len(stack) > 0:
@@ -160,21 +171,16 @@ def make_cfg():
                 restore_registers(restore.regs)
                 # statusを逆転
                 update_eflags(restore.opcode, not(status))
-                print("restore: " + restore.raw)
-                gdb.execute("jmp *" + restore.addr)
+                # print("restore: " + restore.raw)
+                gdb.execute("j *" + restore.addr)
                 continue
             gdb.execute('info breakpoints')
             break
 
         # jmp系命令の時
         if 'j' in lines[1].opcode:
-            # print(info.raw)
-            node = Node()
-            cfg.append(node)
-
             # 次に呼ばれる時はfalseなので, 設定してからstackに積む
             lines[1].regs = get_registers()
-            stack.append((lines[1], True))
 
             # trueに変更
             update_eflags(lines[1].opcode, True)
@@ -185,19 +191,25 @@ def make_cfg():
             line = GDBMgr(line[3:])
 
             if int(line.addr, 0) < int(ub_addr, 0):
-                # もう到達したところ
-                idx = cfg.get_idx(line.addr)
-                cfg.nodes[idx].dsts = len(cfg.nodes)-1 # 末尾がdst idx
+                # もう到達していた場合
+                # そのまま実行
+                continue
+                #idx = cfg.get_idx(line.addr)
+                #cfg.nodes[idx].dsts = len(cfg.nodes)-1 # 末尾がdst idx
             else:
-                # まだ到達していないところ
+                # まだ到達していない場合
                 ub_addr = line.addr
-            # メモリをrestoreしてtopの情報を復元
+                print("ud_addr: ", ub_addr)
+
+            # メモリをrestoreしてtopの情報を復元し, falseで実行
             restore_registers(lines[1].regs)
             update_eflags(lines[1].opcode, False)
-            gdb.execute("jmp *" + lines[1].addr)
+            stack.append((lines[1], False))
+            gdb.execute("j *" + lines[1].addr)
 
     for node in cfg.nodes:
         print(node)
+    gdb.execute('set logging off')
     gdb.execute('quit')
 
 

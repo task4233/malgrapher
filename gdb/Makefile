@@ -17,3 +17,9 @@ test:
 .PHONY:run
 run:
 	gdb -q -x ./src/step.py && rm peda-session-test.txt
+
+showmain:
+	gdb -batch -ex 'file target/test' -ex 'disassemble main'
+
+createcfg:
+	gdb -q -x ./gdb_scripts/make_cfg.py ./target/test

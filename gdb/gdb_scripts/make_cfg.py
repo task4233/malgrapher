@@ -1,5 +1,5 @@
 import gdb
-from collections import deque
+import sys
 
 # from make_breakpoints.py
 def create_breakpoints():
@@ -55,7 +55,7 @@ def update_eflags(opcode, status):
         operation += ' |= (' + true_stat[opcode] + ')'
     else:
         # フラグを倒す
-        operation += ' &= (' + true_stat[opcode] + ')'
+        operation += ' &= !(' + true_stat[opcode] + ')'
     gdb.execute(operation)
 
 # from get_registers.py
@@ -97,75 +97,95 @@ class CFG:
         self.nodes = []
     
     def get_idx(self, addr_str):
-        for idx, node in self.nodes:
-            if int(node.lb_addr, 0) < int(addr_str, 0) and \
-                int(addr_str, 0) < int(node.ub_addr, 0):
-                return idx
-        self.nodes.append(Node()) # ここ少し考えた方が良いかも
+        for idx in range(len(self.nodes)):
+            n = self.nodes[idx]
+            print(n.lb_addr)
+            print(n.ub_addr)
+            if int(n.lb_addr, 0) > int(addr_str, 0):
+                continue
+            if len(n.ub_addr) > 0 and int(addr_str, 0) > int(n.ub_addr, 0):
+                continue
+            return idx
+        # self.nodes.append(Node()) # ここ少し考えた方が良いかも
         return len(self.nodes)-1 # 最後の要素を返す
     
     def append(self, node):
+        """ append できる条件は, 追加するノードが既知のノードに内包されないこと
+        """
+        for n in self.nodes:
+            if len(n.ub_addr) == 0:
+                continue
+            if n.lb_addr == node.lb_addr:
+                if node.ub_addr > n.ub_addr:
+                    n.ub_addr = node.ub_addr
+                return
+            if int(n.lb_addr, 0) <= int(node.lb_addr, 0) and \
+                int(node.ub_addr, 0) <= int(n.ub_addr, 0):
+                continue
         self.nodes.append(node)
 
 class Node:
     """Node manages node of CFG
     """
     def __init__(self):
-        self.lb_addr = ""  # lower bound
-        self.ub_addr = ""  # upper bound
+        self.lb_addr = "0xffffffffffffffff"  # lower bound
+        self.ub_addr = "0x0"  # upper bound
         self.dsts = []
-        self.lines = {}
-
-    def set_lines(self, addr_str, info):
-        if addr_str in self.lines:
-            return
-        self.lines[addr_str] = info
     
-    def __str__(self):
-        return "[%s, %s], dst=%s, lines=%s" % (self.lb_addr, self.ub_addr, ",".join(self.dsts), ",".join(["[{0}, {1}]".format(k, v) for (k,v) in self.lines.items()]))
+    # def __str__(self):
+    #     return "[%s, %s], dst=%s, lines=%s" % (self.lb_addr, self.ub_addr, ",".join(self.dsts), ",".join(["[{0}, {1}]".format(k, v) for (k,v) in self.lines.items()]))
 
 
 def make_cfg():
-    cfg = CFG()
-    node = Node()
     create_breakpoints()
-    ub_addr = "0x0"
-    stack = []
 
     # 実行
-    gdb.execute("set logging file log.out")
-    gdb.execute("set logging on")
     gdb.execute('run')
     gdb.execute('info breakpoints')
 
+    # 初期化
+    cfg = CFG()
+    node = Node()
+    # 最大到達アドレスは, デバッガのステップ実行で訪れたことのある最大のアドレス
+    ub_addr = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:]).addr
+    stack = []
+    last_line = GDBMgr("0x0 :     test    code")
+
     while True:
-        print("stack=", stack)
+        # ステップ実行
+        last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
         gdb.execute('n')
+
+        # 現在の行から2行分だけ逆アセンブルしたコードを取得して, 
+        # その時のレジスタの値を保持
         # => 0x55555555463e <main+4>:     sub    rsp,0x10
-        lines = gdb.execute('x/2i $rip', to_string=True).split('\n')
+        lines = gdb.execute('x/2i $pc', to_string=True).split('\n')
         lines[0] = lines[0][3:]  # delete =>
-
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
-        [node.set_lines(line.addr, line) for line in lines]
         print("lines: ", lines[0].opcode)
-        # レジスタ保存
-        lines[0].reg = get_registers()
+        lines[0].regs = get_registers()
 
-        """ if int(lines[0].addr, 0) >= int(ub_addr, 0):
-            ub_addr = lines[0].addr
-            # 追い付いてしまった時
-            # スタックトップの条件を逆にして実行
-            if len(stack) > 0:
-                (restore, status) = stack.pop()
-                restore_registers(restore.regs)
-                update_eflags(restore.opcode, not(status))
-                # print("restore" + restore.raw)
-                gdb.execute("j *" + restore.addr)
-                continue
-            gdb.execute('info breakpoints')
-            break """
+        # 今いるノードのlb_addrを更新
+        if int(lines[0].addr, 0) < int(node.lb_addr, 0):
+            node.lb_addr = lines[0].addr
+        
+        # 1つ前のアドレスがjmp系命令だった時, 
+        # 最大到達アドレスを更新
+        # TODO: おかしい気がする
+        if "j" in last_line.opcode:
+            frm_idx = cfg.get_idx(last_line.addr)
+            dst_idx = cfg.get_idx(lines[0].addr)
+            cfg.nodes[frm_idx].dsts.append(dst_idx)
+            node.lb_addr = lines[0].addr
 
+        # 次のオペコードがret命令だった時, 
+        # ノードのub_addrとしてcfgのnodesに保存
         if 'ret' in lines[1].opcode:
+            node.ub_addr = lines[1].addr
+            cfg.append(node)
+
+            # まだやり残したアドレスがある場合は,
+            # 情報を復元して実施
             if len(stack) > 0:
                 (restore, status) = stack.pop()
                 restore_registers(restore.regs)
@@ -174,42 +194,89 @@ def make_cfg():
                 # print("restore: " + restore.raw)
                 gdb.execute("j *" + restore.addr)
                 continue
-            gdb.execute('info breakpoints')
             break
 
-        # jmp系命令の時
-        if 'j' in lines[1].opcode:
-            # 次に呼ばれる時はfalseなので, 設定してからstackに積む
-            lines[1].regs = get_registers()
+        # 今の命令がjmp系命令の時
+        if 'j' in lines[0].opcode:
+            # Nodeの終端なので, ub_addrを埋める
+            node.ub_addr = lines[0].addr
+            # nodeをappend
+            cfg.append(node)
 
             # trueに変更
-            update_eflags(lines[1].opcode, True)
+            update_eflags(lines[0].opcode, True)
 
             # ジャンプ先の情報を取得
+            gdb.execute("j *" + lines[0].addr)
             gdb.execute("n")
-            line = gdb.execute('x/i $rip', to_string=True)
-            line = GDBMgr(line[3:])
+            line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
 
+            # ジャンプ先の情報を保存
+            frm_idx = cfg.get_idx(lines[0].addr)
+            dst_idx = cfg.get_idx(line.addr)
+            cfg.nodes[frm_idx].dsts.append(dst_idx)
+
+            # 新たにノードを生成
+            node = Node()
+            node.lb_addr = line.addr
+
+            # ジャンプ先に既に到達していた場合
             if int(line.addr, 0) < int(ub_addr, 0):
-                # もう到達していた場合
-                # そのまま実行
+                # Trueの条件で実行したことにして, そのまま実行
+                stack.append((lines[0], True))
                 continue
-                #idx = cfg.get_idx(line.addr)
-                #cfg.nodes[idx].dsts = len(cfg.nodes)-1 # 末尾がdst idx
-            else:
-                # まだ到達していない場合
-                ub_addr = line.addr
-                print("ud_addr: ", ub_addr)
+            # ジャンプ先と最大到達アドレスが同じ場合
+            elif int(line.addr, 0) == int(ub_addr, 0):
+                # スタックに残っている情報を復元して, 
+                # 以前実行したときと逆のフラグに書き換えて実行
+                if len(stack) > 0:
+                    (restore, status) = stack.pop()
+                    restore_registers(restore.regs)
+                    update_eflags(restore.opcode, not(status))
+                    gdb.execute("j *" + restore.addr)
+                continue
+            
+            # 初めてそのアドレスに到達したとき
+            # 最大到達アドレスを更新して, 過去のノードをappend
+            ub_addr = line.addr
+            cfg.append(node)
 
-            # メモリをrestoreしてtopの情報を復元し, falseで実行
-            restore_registers(lines[1].regs)
-            update_eflags(lines[1].opcode, False)
-            stack.append((lines[1], False))
-            gdb.execute("j *" + lines[1].addr)
+            # 新たにノードを生成
+            node = Node()
+            node.lb_addr = ub_addr
 
+            # jmp命令の時はflagを書き換えても意味が無いのでそれ以上進まない
+            if lines[0].opcode == 'jmp':
+                (restore, status) = stack.pop()
+                restore_registers(restore.regs)
+                update_eflags(restore.opcode, not(status))
+                gdb.execute("j *" + restore.addr)
+                continue
+
+            # メモリをrestoreしてtopの情報を復元し, falseで実行 
+            print("regs: ", lines[0].regs)   
+            restore_registers(lines[0].regs)
+            update_eflags(lines[0].opcode, False)
+            stack.append((lines[0], False))
+            gdb.execute("j *" + lines[0].addr)
+        else:
+            # 次が区切れめなら, nodeを断ち切る
+            if lines[1].addr == ub_addr:
+                node.ub_addr = lines[0].addr
+                print(lines[1].addr)
+                print(cfg.get_idx(lines[1].addr))
+                node.dsts.append(cfg.get_idx(lines[1].addr))
+                cfg.append(node)
+                node = Node()
+                node.lb_addr = lines[1].addr
+                continue
+
+    idx = 0
     for node in cfg.nodes:
-        print(node)
-    gdb.execute('set logging off')
+        print("node[" + str(idx) + "] => : ", end="")
+        print("[" + node.lb_addr + ", " + node.ub_addr + "]: ", end="")
+        print("dst: [" + ", ".join([str(dst) for dst in node.dsts])  + "]")
+        idx+=1
     gdb.execute('quit')
 
 

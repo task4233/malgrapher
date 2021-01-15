@@ -27,30 +27,8 @@ class TestMakeCFG(unittest.TestCase):
         """
 
         got = self.makecfg.get_registers()
-        want = {'rax': '0x55555555463a',
-                'rbx': '0x0',
-                'rcx': '0x5555555546c0',
-                'rdx': '0x7fffffffe058',
-                'rsi': '0x7fffffffe048',
-                'rdi': '0x1',
-                'rbp': '0x7fffffffdf60',
-                'rsp': '0x7fffffffdf60',
-                'r8': '0x7ffff7dced80',
-                'r9': '0x7ffff7dced80',
-                'r10': '0x0',
-                'r11': '0x0',
-                'r12': '0x555555554530',
-                'r13': '0x7fffffffe040',
-                'r14': '0x0',
-                'r15': '0x0',
-                'rip': '0x55555555463e',
-                'eflags': '0x246',
-                'cs': '0x33',
-                'ss': '0x2b',
-                'ds': '0x0',
-                'es': '0x0',
-                'fs': '0x0',
-                'gs': '0x0'}
+        want = {'rax': '0x55555555463a', 'rbx': '0x0', 'rcx': '0x5555555546c0', 'rdx': '0x7fffffffe048', 'rsi': '0x7fffffffe038', 'rdi': '0x1', 'rbp': '0x7fffffffdf50', 'rsp': '0x7fffffffdf50', 'r8': '0x7ffff7dced80', 'r9': '0x7ffff7dced80',
+                'r10': '0x0', 'r11': '0x0', 'r12': '0x555555554530', 'r13': '0x7fffffffe030', 'r14': '0x0', 'r15': '0x0', 'rip': '0x55555555463e', 'eflags': '0x246', 'cs': '0x33', 'ss': '0x2b', 'ds': '0x0', 'es': '0x0', 'fs': '0x0', 'gs': '0x0'}
         self.assertDictEqual(got, want)
 
     def test_make_cfg(self):

@@ -12,6 +12,8 @@
 !gdb/target/*
 !gdb/tests/*
 
+!makecfg/
+!makecfg/**
 
 # Autogened File
 .DS_Store

@@ -1,0 +1,24 @@
+*
+!.gitignore
+
+!README.md
+
+# Whitelist
+!gdb/
+!gdb/*
+!gdb/docs/*
+!gdb/gdb_scripts/*
+!gdb/makecfg/*
+!gdb/target/*
+!gdb/tests/*
+
+
+# Autogened File
+.DS_Store
+Thumbs.db
+*.coverage
+*.pdf
+*.txt
+*out
+*main
+.gdb_history

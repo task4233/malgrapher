@@ -31,37 +31,6 @@ Breakpoint 28 at 0x5555555546b5
 Breakpoint 29 at 0x5555555546b6
 
 Breakpoint 1, 0x000055555555463a in main ()
-Num     Type           Disp Enb Address            What
-1       breakpoint     keep y   0x000055555555463a <main>
-	breakpoint already hit 1 time
-2       breakpoint     keep y   0x000055555555463b <main+1>
-3       breakpoint     keep y   0x000055555555463e <main+4>
-4       breakpoint     keep y   0x0000555555554642 <main+8>
-5       breakpoint     keep y   0x0000555555554649 <main+15>
-6       breakpoint     keep y   0x0000555555554650 <main+22>
-7       breakpoint     keep y   0x0000555555554654 <main+26>
-8       breakpoint     keep y   0x0000555555554656 <main+28>
-9       breakpoint     keep y   0x000055555555465d <main+35>
-10      breakpoint     keep y   0x0000555555554662 <main+40>
-11      breakpoint     keep y   0x0000555555554666 <main+44>
-12      breakpoint     keep y   0x0000555555554668 <main+46>
-13      breakpoint     keep y   0x000055555555466f <main+53>
-14      breakpoint     keep y   0x0000555555554674 <main+58>
-15      breakpoint     keep y   0x0000555555554676 <main+60>
-16      breakpoint     keep y   0x000055555555467d <main+67>
-17      breakpoint     keep y   0x0000555555554682 <main+72>
-18      breakpoint     keep y   0x0000555555554684 <main+74>
-19      breakpoint     keep y   0x000055555555468b <main+81>
-20      breakpoint     keep y   0x0000555555554690 <main+86>
-21      breakpoint     keep y   0x0000555555554694 <main+90>
-22      breakpoint     keep y   0x0000555555554696 <main+92>
-23      breakpoint     keep y   0x000055555555469d <main+99>
-24      breakpoint     keep y   0x00005555555546a2 <main+104>
-25      breakpoint     keep y   0x00005555555546a4 <main+106>
-26      breakpoint     keep y   0x00005555555546ab <main+113>
-27      breakpoint     keep y   0x00005555555546b0 <main+118>
-28      breakpoint     keep y   0x00005555555546b5 <main+123>
-29      breakpoint     keep y   0x00005555555546b6 <main+124>
 Single stepping until exit from function main,
 which has no line number information.
 
@@ -91,13 +60,478 @@ Single stepping until exit from function main,
 which has no line number information.
 
 Breakpoint 7, 0x0000555555554654 in main ()
+lines:  je
+
+Breakpoint 7, 0x0000555555554654 in main ()
 Single stepping until exit from function main,
 which has no line number information.
 
 Breakpoint 18, 0x0000555555554684 in main ()
-(gdb) (gdb) (gdb) q
+node[0] => : [0x55555555463b, 0x555555554654]: dst: []
+node[1] => : [0x555555554684, 0x0]: dst: []
+0x555555554654
+[ 0x55555555463b 0x555555554654 ]
+0x555555554684
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+frm: 0x555555554654, dst: 0x555555554684
+frm: 0, dst: 1
+regs:  <__main__.Register object at 0x7fb3dc27c6a0>
+
+Breakpoint 7, 0x0000555555554654 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1]
+node[1] => : [0x555555554684, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 8, 0x0000555555554656 in main ()
+lines:  lea
+0x555555554654
+[ 0x55555555463b 0x555555554654 ]
+0x555555554656
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x0 ]
+frm: 0x555555554654, dst: 0x555555554656
+frm: 0, dst: 2
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 9, 0x000055555555465d in main ()
+lines:  call
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 10, 0x0000555555554662 in main ()
+lines:  cmp
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 11, 0x0000555555554666 in main ()
+lines:  je
+
+Breakpoint 11, 0x0000555555554666 in main ()
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 15, 0x0000555555554676 in main ()
+0x555555554666
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+0x555555554676
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x0 ]
+frm: 0x555555554666, dst: 0x555555554676
+frm: 2, dst: 3
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 16, 0x000055555555467d in main ()
+lines:  call
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 17, 0x0000555555554682 in main ()
+lines:  jmp
+
+Breakpoint 17, 0x0000555555554682 in main ()
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 27, 0x00005555555546b0 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x555555554682]: dst: []
+node[4] => : [0x5555555546b0, 0x0]: dst: []
+0x555555554682
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+0x5555555546b0
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x0 ]
+frm: 0x555555554682, dst: 0x5555555546b0
+frm: 3, dst: 4
+regs:  <__main__.Register object at 0x7fb3dc27cfd0>
+
+Breakpoint 17, 0x0000555555554682 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 27, 0x00005555555546b0 in main ()
+lines:  mov
+0x555555554682
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+0x5555555546b0
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x0 ]
+frm: 0x555555554682, dst: 0x5555555546b0
+frm: 3, dst: 4
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 28, 0x00005555555546b5 in main ()
+lines:  leave
+
+Breakpoint 17, 0x0000555555554682 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 27, 0x00005555555546b0 in main ()
+lines:  mov
+0x555555554682
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+0x5555555546b0
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+frm: 0x555555554682, dst: 0x5555555546b0
+frm: 3, dst: 4
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 28, 0x00005555555546b5 in main ()
+lines:  leave
+
+Breakpoint 11, 0x0000555555554666 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 12, 0x0000555555554668 in main ()
+lines:  lea
+0x555555554666
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+0x555555554668
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+[ 0x555555554668 0x5555555546b6 ]
+frm: 0x555555554666, dst: 0x555555554668
+frm: 2, dst: 5
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 13, 0x000055555555466f in main ()
+lines:  call
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 14, 0x0000555555554674 in main ()
+lines:  jmp
+
+Breakpoint 14, 0x0000555555554674 in main ()
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 27, 0x00005555555546b0 in main ()
+0x555555554674
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+[ 0x555555554668 0x555555554674 ]
+0x5555555546b0
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+frm: 0x555555554674, dst: 0x5555555546b0
+frm: 5, dst: 4
+
+Breakpoint 7, 0x0000555555554654 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 18, 0x0000555555554684 in main ()
+lines:  lea
+0x555555554654
+[ 0x55555555463b 0x555555554654 ]
+0x555555554684
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x0 ]
+frm: 0x555555554654, dst: 0x555555554684
+frm: 0, dst: 1
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 19, 0x000055555555468b in main ()
+lines:  call
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 20, 0x0000555555554690 in main ()
+lines:  cmp
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x0]: dst: []
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 21, 0x0000555555554694 in main ()
+lines:  je
+
+Breakpoint 21, 0x0000555555554694 in main ()
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 25, 0x00005555555546a4 in main ()
+0x555555554694
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+0x5555555546a4
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+[ 0x555555554668 0x555555554674 ]
+[ 0x5555555546a4 0x0 ]
+frm: 0x555555554694, dst: 0x5555555546a4
+frm: 1, dst: 6
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x0]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 26, 0x00005555555546ab in main ()
+lines:  call
+0x5555555546ab
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+[ 0x555555554668 0x555555554674 ]
+[ 0x5555555546a4 0x5555555546ab ]
+0x5555555546b0
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+frm: 0x5555555546ab, dst: 0x5555555546b0
+frm: 6, dst: 4
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x5555555546ab]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 27, 0x00005555555546b0 in main ()
+lines:  mov
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x5555555546ab]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 28, 0x00005555555546b5 in main ()
+lines:  leave
+
+Breakpoint 21, 0x0000555555554694 in main ()
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x5555555546ab]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 22, 0x0000555555554696 in main ()
+lines:  lea
+0x555555554694
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+0x555555554696
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+[ 0x555555554668 0x555555554674 ]
+[ 0x5555555546a4 0x5555555546ab ]
+[ 0x555555554696 0x5555555546b6 ]
+frm: 0x555555554694, dst: 0x555555554696
+frm: 1, dst: 7
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6, 7]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x5555555546ab]: dst: [4]
+node[7] => : [0x555555554696, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 23, 0x000055555555469d in main ()
+lines:  call
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6, 7]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x5555555546ab]: dst: [4]
+node[7] => : [0x555555554696, 0x5555555546b6]: dst: []
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 24, 0x00005555555546a2 in main ()
+lines:  jmp
+
+Breakpoint 24, 0x00005555555546a2 in main ()
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 27, 0x00005555555546b0 in main ()
+0x5555555546a2
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+[ 0x555555554668 0x555555554674 ]
+[ 0x5555555546a4 0x5555555546ab ]
+[ 0x555555554696 0x5555555546a2 ]
+0x5555555546b0
+[ 0x55555555463b 0x555555554654 ]
+[ 0x555555554684 0x555555554694 ]
+[ 0x555555554656 0x555555554666 ]
+[ 0x555555554676 0x555555554682 ]
+[ 0x5555555546b0 0x5555555546b6 ]
+frm: 0x5555555546a2, dst: 0x5555555546b0
+frm: 7, dst: 4
+node[0] => : [0x55555555463b, 0x555555554654]: dst: [1, 2]
+node[1] => : [0x555555554684, 0x555555554694]: dst: [6, 7]
+node[2] => : [0x555555554656, 0x555555554666]: dst: [3, 5]
+node[3] => : [0x555555554676, 0x555555554682]: dst: [4]
+node[4] => : [0x5555555546b0, 0x5555555546b6]: dst: []
+node[5] => : [0x555555554668, 0x555555554674]: dst: [4]
+node[6] => : [0x5555555546a4, 0x5555555546ab]: dst: [4]
+node[7] => : [0x555555554696, 0x5555555546a2]: dst: [4]
+Single stepping until exit from function main,
+which has no line number information.
+
+Breakpoint 28, 0x00005555555546b5 in main ()
+lines:  leave
 A debugging session is active.
 
-	Inferior 1 [process 25642] will be killed.
+	Inferior 1 [process 18053] will be killed.
 
-Quit anyway? (y or n) Makefile:25: recipe for target 'createcfg' failed
+Quit anyway? (y or n) [answered Y; input not from terminal]

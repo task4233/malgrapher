@@ -96,25 +96,29 @@ class CFG:
     def __init__(self):
         self.nodes = []
     
+    # 引数のaddr_strがどのノード番号に該当するかを返す
     def get_idx(self, addr_str):
+        print(addr_str)
         for idx in range(len(self.nodes)):
             n = self.nodes[idx]
-            print(n.lb_addr)
-            print(n.ub_addr)
+            print("[", n.lb_addr, n.ub_addr, "]")
+            # 満たしたい条件は
+            # n.lb_addr <= addr_str && addr_str <= n.ub_addr
             if int(n.lb_addr, 0) > int(addr_str, 0):
                 continue
-            if len(n.ub_addr) > 0 and int(addr_str, 0) > int(n.ub_addr, 0):
+            elif n.ub_addr == "0x0":
+                if int(addr_str, 0) != int(n.lb_addr, 0):
+                    continue
+            elif int(addr_str, 0) > int(n.ub_addr, 0):
                 continue
             return idx
         # self.nodes.append(Node()) # ここ少し考えた方が良いかも
-        return len(self.nodes)-1 # 最後の要素を返す
+        return -1 # 最後の要素を返す
     
     def append(self, node):
         """ append できる条件は, 追加するノードが既知のノードに内包されないこと
         """
         for n in self.nodes:
-            if len(n.ub_addr) == 0:
-                continue
             if n.lb_addr == node.lb_addr:
                 if node.ub_addr > n.ub_addr:
                     n.ub_addr = node.ub_addr
@@ -123,6 +127,18 @@ class CFG:
                 int(node.ub_addr, 0) <= int(n.ub_addr, 0):
                 continue
         self.nodes.append(node)
+    
+    def append_dst_node(self, frm_addr, dst_addr):
+        """ node.dstsにジャンプ先のブロック番号を追加する
+        """
+        frm_idx = self.get_idx(frm_addr)
+        dst_idx = self.get_idx(dst_addr)
+        print("frm: " + frm_addr + ", dst: " + dst_addr)
+        print("frm: " + str(frm_idx) + ", dst: " + str(dst_idx))
+        for dst in self.nodes[frm_idx].dsts:
+            if dst == dst_idx:
+                return
+        self.nodes[frm_idx].dsts.append(dst_idx)
 
 class Node:
     """Node manages node of CFG
@@ -135,13 +151,20 @@ class Node:
     # def __str__(self):
     #     return "[%s, %s], dst=%s, lines=%s" % (self.lb_addr, self.ub_addr, ",".join(self.dsts), ",".join(["[{0}, {1}]".format(k, v) for (k,v) in self.lines.items()]))
 
+def print_nodes(cfg):
+    idx = 0
+    for node in cfg.nodes:
+        print("node[" + str(idx) + "] => : ", end="")
+        print("[" + node.lb_addr + ", " + node.ub_addr + "]: ", end="")
+        print("dst: [" + ", ".join([str(dst) for dst in node.dsts])  + "]")
+        idx+=1
 
 def make_cfg():
     create_breakpoints()
 
     # 実行
     gdb.execute('run')
-    gdb.execute('info breakpoints')
+    # gdb.execute('info breakpoints')
 
     # 初期化
     cfg = CFG()
@@ -152,6 +175,7 @@ def make_cfg():
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
+        print_nodes(cfg)
         # ステップ実行
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
         gdb.execute('n')
@@ -173,14 +197,13 @@ def make_cfg():
         # 最大到達アドレスを更新
         # TODO: おかしい気がする
         if "j" in last_line.opcode:
-            frm_idx = cfg.get_idx(last_line.addr)
-            dst_idx = cfg.get_idx(lines[0].addr)
-            cfg.nodes[frm_idx].dsts.append(dst_idx)
             node.lb_addr = lines[0].addr
+            cfg.append(node)
+            cfg.append_dst_node(last_line.addr, lines[0].addr)
 
         # 次のオペコードがret命令だった時, 
         # ノードのub_addrとしてcfgのnodesに保存
-        if 'ret' in lines[1].opcode:
+        if 'ret' == lines[1].opcode:
             node.ub_addr = lines[1].addr
             cfg.append(node)
 
@@ -211,22 +234,26 @@ def make_cfg():
             gdb.execute("n")
             line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
 
-            # ジャンプ先の情報を保存
-            frm_idx = cfg.get_idx(lines[0].addr)
-            dst_idx = cfg.get_idx(line.addr)
-            cfg.nodes[frm_idx].dsts.append(dst_idx)
-
             # 新たにノードを生成
             node = Node()
             node.lb_addr = line.addr
+            cfg.append(node)
 
             # ジャンプ先に既に到達していた場合
             if int(line.addr, 0) < int(ub_addr, 0):
+                # jmp命令の時はflagを書き換えても意味が無いのでそれ以上進まない
+
                 # Trueの条件で実行したことにして, そのまま実行
                 stack.append((lines[0], True))
+
+                # ジャンプ先の情報を保存
+                cfg.append_dst_node(lines[0].addr, line.addr)
                 continue
             # ジャンプ先と最大到達アドレスが同じ場合
             elif int(line.addr, 0) == int(ub_addr, 0):
+                # ジャンプ先の情報を保存
+                cfg.append_dst_node(lines[0].addr, line.addr)
+
                 # スタックに残っている情報を復元して, 
                 # 以前実行したときと逆のフラグに書き換えて実行
                 if len(stack) > 0:
@@ -241,17 +268,11 @@ def make_cfg():
             ub_addr = line.addr
             cfg.append(node)
 
+            print_nodes(cfg)
             # 新たにノードを生成
             node = Node()
             node.lb_addr = ub_addr
-
-            # jmp命令の時はflagを書き換えても意味が無いのでそれ以上進まない
-            if lines[0].opcode == 'jmp':
-                (restore, status) = stack.pop()
-                restore_registers(restore.regs)
-                update_eflags(restore.opcode, not(status))
-                gdb.execute("j *" + restore.addr)
-                continue
+            cfg.append_dst_node(lines[0].addr, line.addr)
 
             # メモリをrestoreしてtopの情報を復元し, falseで実行 
             print("regs: ", lines[0].regs)   
@@ -263,20 +284,12 @@ def make_cfg():
             # 次が区切れめなら, nodeを断ち切る
             if lines[1].addr == ub_addr:
                 node.ub_addr = lines[0].addr
-                print(lines[1].addr)
-                print(cfg.get_idx(lines[1].addr))
-                node.dsts.append(cfg.get_idx(lines[1].addr))
                 cfg.append(node)
+                cfg.append_dst_node(lines[0].addr, lines[1].addr)
                 node = Node()
                 node.lb_addr = lines[1].addr
                 continue
 
-    idx = 0
-    for node in cfg.nodes:
-        print("node[" + str(idx) + "] => : ", end="")
-        print("[" + node.lb_addr + ", " + node.ub_addr + "]: ", end="")
-        print("dst: [" + ", ".join([str(dst) for dst in node.dsts])  + "]")
-        idx+=1
     gdb.execute('quit')
 
 

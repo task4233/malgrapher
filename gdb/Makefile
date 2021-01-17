@@ -1,7 +1,7 @@
 ENV_TEST_FILE := .env.test
 ENV_TEST := $(shell cat $(ENV_TEST_FILE))
 
-ENV_TARGET_FILE := target/test32
+ENV_TARGET_FILE := /tmp/bin
 # ENV_TARGET := $(shell cat $(ENV_TARGET_FILE))
 
 .PHONY:gen32
@@ -24,4 +24,4 @@ showmain:
 	$(ENV_TEST) gdb -batch -ex "file ${ENV_TARGET_FILE}" -ex 'disassemble main'
 
 createcfg:
-	$(ENV_TEST) gdb -q -x ./gdb_scripts/make_cfg.py $(ENV_TARGET_FILE)
+	$(ENV_TEST) gdb -q -x ./gdb_scripts/make_cfg.py $(ENV_TARGET_FILE) 

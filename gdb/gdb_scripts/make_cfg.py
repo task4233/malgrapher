@@ -3,139 +3,60 @@ import sys
 import subprocess
 import os
 
-class Config:
-    # init
-    def __init__(self, target_file_path, get_stop_addr_script_file_path="./gdb_scripts/get_stop_addr.py"):
-        self.target_file_path = target_file_path
-        self.get_stop_addr_script_file_path = get_stop_addr_script_file_path
-        self.ENV = os.environ['ENV']
-        self.offset = self.get_offset_with_objdump_and_gdb()
+# objdumpでの止まるアドレスを取得
+def get_stop_addr_objdump():
+    objdump_args = ['objdump', '-d', '-M', 'intel', os.environ['TARGET_FILE']]
+    proc1 = __subprocess_helper(objdump_args)
 
-    # gdbでmainの全てにbreakpointを立てる
-    def get_func_addrs(self, func_name):
-        gdb_args = ['gdb', '-batch', '-ex', 'file ' + self.target_file_path, '-ex', 'disassemble ' + func_name]
-        proc1 = self.__subprocess_helper(gdb_args)
+    filter_main_args = ['grep', '-A', '30', '<main>']
+    proc2 = __subprocess_helper(filter_main_args, proc1.stdout)
+    proc1.stdout.close()
 
-        filter_awk_args = ['awk', '{print $1}']
-        proc2 = self.__subprocess_helper(filter_awk_args, proc1.stdout)
-        proc1.stdout.close()
+    filter_stop_addr = ['grep', 'sub']
+    proc1 = __subprocess_helper(filter_stop_addr, proc2.stdout)
+    proc2.stdout.close()
 
-        output = proc2.communicate()[0].decode('utf8')
-        ret_addrs = []
-        if '\n' in output:
-            ret_addrs = output.split('\n')[1:-2]
-            ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
-        return ret_addrs
+    filter_cut_args = ['cut', '-d', ':', '-f', '1']
+    proc2 = __subprocess_helper(filter_cut_args, proc1.stdout)
+    proc1.stdout.close()
 
-    # objdumpでret系命令を全て取得
-    def get_ret_addrs(self):
-        objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
-        proc1 = self.__subprocess_helper(objdump_args)
+    output = hex(int(proc2.communicate()[0].decode('utf8').strip(' ').split('\n')[0], 16))
+    return output
 
-        filter_jump_args = ['grep', 'ret']
-        proc2 = self.__subprocess_helper(filter_jump_args, proc1.stdout)
-        proc1.stdout.close()
+# objdumpとgdb実行時のoffsetを取得
+def get_offset_with_objdump_and_gdb(stop_addr):
+    return hex(int(stop_addr, 0) - int(get_stop_addr_objdump(), 0))
 
-        filter_cut_args = ['cut', '-d', ':', '-f', '1']
-        proc1 = self.__subprocess_helper(filter_cut_args, proc2.stdout)
-        proc2.stdout.close()
+def get_func_addrs(func_name):
+    gdb_args = ['gdb', '-batch', '-ex', 'file ' + os.environ['TARGET_FILE'], '-ex', 'disassemble ' + func_name]
+    proc1 = __subprocess_helper(gdb_args)
 
-        output = proc1.communicate()[0].decode('utf8')
-        ret_addrs = []
-        if '\n' in output:
-            ret_addrs = output.split('\n')[:-1]
-            ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
-        return ret_addrs
+    filter_awk_args = ['awk', '{print $1}']
+    proc2 = __subprocess_helper(filter_awk_args, proc1.stdout)
+    proc1.stdout.close()
 
-    # objdumpでjmp系命令を全て取得
-    def get_jmp_addrs(self):
-        objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
-        proc1 = self.__subprocess_helper(objdump_args)
+    output = proc2.communicate()[0].decode('utf8')
+    ret_addrs = []
+    if '\n' in output:
+        ret_addrs = output.split('\n')[1:-2]
+        ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
+    return ret_addrs
 
-        filter_jump_args = ['grep', 'j']
-        proc2 = self.__subprocess_helper(filter_jump_args, proc1.stdout)
-        proc1.stdout.close()
+# breakpointを立てるアドレスを再計算
+def get_func_runtime_addrs(offset, func_name):
+    addrs = get_func_addrs(func_name)
+    addrs = [hex(int(addr, 0) + int(offset, 0)) for addr in addrs]
+    return addrs  
 
-        filter_main_args = ['grep', 'main']
-        proc1 = self.__subprocess_helper(filter_main_args, proc2.stdout)
-        proc2.stdout.close()
-
-        filter_cut_args = ['cut', '-d', ':', '-f', '1']
-        proc2 = self.__subprocess_helper(filter_cut_args, proc1.stdout)
-        proc1.stdout.close()
-
-        output = proc2.communicate()[0].decode('utf8')
-        jmp_addrs = []
-        if '\n' in output:
-            jmp_addrs = output.split('\n')[:-1]
-            jmp_addrs = [hex(int(addr.strip(' '), 16)) for addr in jmp_addrs]
-        return jmp_addrs
-
-    # objdumpでの止まるアドレスを取得
-    def get_stop_addr_objdump(self):
-        objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
-        proc1 = self.__subprocess_helper(objdump_args)
-
-        filter_main_args = ['grep', '-A', '30', '<main>']
-        proc2 = self.__subprocess_helper(filter_main_args, proc1.stdout)
-        proc1.stdout.close()
-
-        filter_stop_addr = ['grep', 'sub']
-        proc1 = self.__subprocess_helper(filter_stop_addr, proc2.stdout)
-        proc2.stdout.close()
-
-        filter_cut_args = ['cut', '-d', ':', '-f', '1']
-        proc2 = self.__subprocess_helper(filter_cut_args, proc1.stdout)
-        proc1.stdout.close()
-
-        output = hex(int(proc2.communicate()[0].decode('utf8').strip(' ').split('\n')[0], 16))
-        return output
-
-    # gdb実行時での止まるアドレスを取得
-    def get_stop_addr_gdb(self):
-        with open(os.devnull, 'w') as nu:
-            init_args = ['rm', '-f', 'tmp_stop_addrs.out']
-            subprocess.call(init_args, stdout=nu)
-
-            gdb_args = ['gdb', '-q', '-x', self.get_stop_addr_script_file_path, self.target_file_path]
-            subprocess.call(gdb_args)
-
-        filter_cut_args = ['cut', '-d', ' ', '-f', '2', 'tmp_stop_addrs.out']
-        addr = subprocess.check_output(filter_cut_args)
-        return addr.decode('utf8').strip('\n')
-
-    # objdumpとgdb実行時のoffsetを取得
-    def get_offset_with_objdump_and_gdb(self):
-        return hex(int(self.get_stop_addr_gdb(), 0) - int(self.get_stop_addr_objdump(), 0))
-
-    # breakpointを立てるアドレスを再計算
-    def get_func_runtime_addrs(self, func_name):
-        addrs = self.get_func_addrs(func_name)
-        addrs = [hex(int(addr, 0) + int(self.offset, 0)) for addr in addrs]
-        return addrs  
-
-    # breakpointを立てるアドレスを再計算(offsetを考慮する)
-    def get_jmp_runtime_addrs(self):
-        addrs = self.get_jmp_addrs()
-        addrs = [hex(int(addr, 0) + int(self.offset, 0)) for addr in addrs]
-        return addrs
-    
-    # breakpointを立てるアドレスを再計算
-    def get_ret_runtime_addrs(self):
-        addrs = self.get_ret_addrs()
-        addrs = [hex(int(addr, 0) + int(self.offset, 0)) for addr in addrs]
-        return addrs
-
-    def __subprocess_helper(self, args, _stdin=None, _stdout=subprocess.PIPE):
-        return subprocess.Popen(args, stdin=_stdin, stdout=_stdout)
+def __subprocess_helper(args, _stdin=None, _stdout=subprocess.PIPE):
+    return subprocess.Popen(args, stdin=_stdin, stdout=_stdout)
 
 
 # from make_breakpoints.py
-def create_breakpoints():
-    target_file_path = 'target/test32'
+def create_breakpoints(stop_addr):
+    offset = get_offset_with_objdump_and_gdb(stop_addr)
     func_name = 'main'
-    config = Config(target_file_path)
-    addrs = config.get_func_runtime_addrs(func_name)
+    addrs = get_func_runtime_addrs(offset, func_name)
     for addr in addrs:
         gdb.execute('b *' + addr)
 
@@ -151,7 +72,7 @@ class Register:
             # regs['rax'] = 0x55555555463a
             if len(tmp) < 2:
                 continue
-            self.regs[tmp[0]] = tmp[1]
+            self.regs[tmp[0]] = tmp[1].split('\t')[0]
 
 def andf(f1, f2):
     return f1 + "&" + f2
@@ -213,7 +134,7 @@ class GDBMgr:
         tmp = line.split(' ')
         tmp = [t for t in tmp if t != '']
         # tmp:  ['0x555555554694', '<main+90>:\tje', '0x5555555546a4', '<main+106>\n']
-        # print("tmp:", tmp)
+        # # print("tmp:", tmp)
         self.addr = tmp[0]
         self.opcode = tmp[1][tmp[1].rfind('\t')+1:]
         self.args = tmp[1:]
@@ -228,10 +149,10 @@ class CFG:
     
     # 引数のaddr_strがどのノード番号に該当するかを返す
     def get_idx(self, addr_str):
-        print(addr_str)
+        # print(addr_str)
         for idx in range(len(self.nodes)):
             n = self.nodes[idx]
-            print("[", n.lb_addr, n.ub_addr, "]")
+            # print("[", n.lb_addr, n.ub_addr, "]")
             # 満たしたい条件は
             # n.lb_addr <= addr_str && addr_str <= n.ub_addr
             if int(n.lb_addr, 0) > int(addr_str, 0):
@@ -263,8 +184,8 @@ class CFG:
         """
         frm_idx = self.get_idx(frm_addr)
         dst_idx = self.get_idx(dst_addr)
-        print("frm: " + frm_addr + ", dst: " + dst_addr)
-        print("frm: " + str(frm_idx) + ", dst: " + str(dst_idx))
+        # print("frm: " + frm_addr + ", dst: " + dst_addr)
+        # print("frm: " + str(frm_idx) + ", dst: " + str(dst_idx))
         for dst in self.nodes[frm_idx].dsts:
             if dst == dst_idx:
                 return
@@ -290,10 +211,11 @@ def print_nodes(cfg):
         idx+=1
 
 def make_cfg():
-    create_breakpoints()
-
-    # 実行
+    gdb.execute('b main')
     gdb.execute('run')
+    line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
+    create_breakpoints(line.addr)
+
     # gdb.execute('info breakpoints')
 
     # 初期化
@@ -305,7 +227,7 @@ def make_cfg():
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
-        print_nodes(cfg)
+        # print_nodes(cfg)
         # ステップ実行
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
         gdb.execute('n')
@@ -316,7 +238,7 @@ def make_cfg():
         lines = gdb.execute('x/2i $pc', to_string=True).split('\n')
         lines[0] = lines[0][3:]  # delete =>
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
-        print("lines: ", lines[0].opcode)
+        # print("lines: ", lines[0].opcode)
         lines[0].regs = get_registers()
 
         # 今いるノードのlb_addrを更新
@@ -344,7 +266,7 @@ def make_cfg():
                 restore_registers(restore.regs)
                 # statusを逆転
                 update_eflags(restore.opcode, not(status))
-                # print("restore: " + restore.raw)
+                # # print("restore: " + restore.raw)
                 gdb.execute("j *" + restore.addr)
                 continue
             break
@@ -398,14 +320,14 @@ def make_cfg():
             ub_addr = line.addr
             cfg.append(node)
 
-            print_nodes(cfg)
+            # print_nodes(cfg)
             # 新たにノードを生成
             node = Node()
             node.lb_addr = ub_addr
             cfg.append_dst_node(lines[0].addr, line.addr)
 
             # メモリをrestoreしてtopの情報を復元し, falseで実行 
-            print("regs: ", lines[0].regs)   
+            # print("regs: ", lines[0].regs)   
             restore_registers(lines[0].regs)
             update_eflags(lines[0].opcode, False)
             stack.append((lines[0], False))
@@ -419,8 +341,7 @@ def make_cfg():
                 node = Node()
                 node.lb_addr = lines[1].addr
                 continue
-
+    print_nodes(cfg)
     gdb.execute('quit')
-
 
 make_cfg()

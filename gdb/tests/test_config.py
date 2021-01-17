@@ -1,5 +1,5 @@
 import unittest
-import sys
+import sys, os
 from makecfg.config import Config
 
 
@@ -8,8 +8,8 @@ class TestConfig(unittest.TestCase):
     """
 
     def setUp(self):
-        target_file_path = './target/test'
-        self.config = Config(target_file_path)
+        self.target_file_path = 'target/test32'
+        self.config = Config(self.target_file_path)
 
     def test_environ(self):
         """test environ ENV is test
@@ -17,6 +17,14 @@ class TestConfig(unittest.TestCase):
 
         got = self.config.ENV
         want = 'test'
+        self.assertEqual(got, want)
+    
+    def test_target(self):
+        """test environ TARGET_FILE
+        """
+
+        got = self.target_file_path
+        want = 'target/test32'
         self.assertEqual(got, want)
 
     def test_get_func_addrs(self):

@@ -73,7 +73,7 @@ class Config:
         objdump_args = ['objdump', '-d', '-M', 'intel', self.target_file_path]
         proc1 = self.__subprocess_helper(objdump_args)
 
-        filter_main_args = ['grep', '-A', '5', '<main>']
+        filter_main_args = ['grep', '-A', '30', '<main>']
         proc2 = self.__subprocess_helper(filter_main_args, proc1.stdout)
         proc1.stdout.close()
 
@@ -85,7 +85,7 @@ class Config:
         proc2 = self.__subprocess_helper(filter_cut_args, proc1.stdout)
         proc1.stdout.close()
 
-        output = hex(int(proc2.communicate()[0].decode('utf8').strip(' '), 16))
+        output = hex(int(proc2.communicate()[0].decode('utf8').strip(' ').split('\n')[0], 16))
         return output
 
     # gdb実行時での止まるアドレスを取得

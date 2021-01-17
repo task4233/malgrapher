@@ -77,10 +77,11 @@ class Register:
 def andf(f1, f2):
     return f1 + "&" + f2
 
+def orf(f1, f2):
+    return f1 + "|" + f2
 
 def notf(flag):
     return "!(" + flag + ")"
-
 
 def update_eflags(opcode, status):
     if opcode == "jmp":
@@ -88,6 +89,7 @@ def update_eflags(opcode, status):
 
     operation = 'set $eflags'
     flag = {
+        "OF": "1 << 11",
         "CF": "1 << 0",
         "PF": "1 << 2",
         "ZF": "1 << 6",
@@ -99,6 +101,7 @@ def update_eflags(opcode, status):
         "je": flag["ZF"],
         "jne": notf(flag["ZF"]),
         "ja": andf(notf(flag["CF"]), notf(flag["ZF"])),
+        "jle": andf(notf(flag["ZF"]), andf(flag["SF"], notf(flag["OF"]))),
     }
 
     if status:
@@ -227,7 +230,7 @@ def make_cfg():
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
-        # print_nodes(cfg)
+        print_nodes(cfg)
         # ステップ実行
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
         gdb.execute('n')
@@ -238,7 +241,7 @@ def make_cfg():
         lines = gdb.execute('x/2i $pc', to_string=True).split('\n')
         lines[0] = lines[0][3:]  # delete =>
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
-        # print("lines: ", lines[0].opcode)
+        print("lines: ", lines[0].opcode)
         lines[0].regs = get_registers()
 
         # 今いるノードのlb_addrを更新
@@ -255,7 +258,7 @@ def make_cfg():
 
         # 次のオペコードがret命令だった時, 
         # ノードのub_addrとしてcfgのnodesに保存
-        if 'ret' == lines[1].opcode:
+        if 'ret' in lines[1].opcode:
             node.ub_addr = lines[1].addr
             cfg.append(node)
 

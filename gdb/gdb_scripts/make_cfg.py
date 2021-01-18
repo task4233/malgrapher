@@ -230,15 +230,17 @@ def make_cfg():
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
+        gdb.execute('info breakpoints')
         print_nodes(cfg)
         # ステップ実行
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
         gdb.execute('n')
 
-        # 現在の行から2行分だけ逆アセンブルしたコードを取得して, 
+        # 現在の行から10行分だけ逆アセンブルしたコードを取得して, 
         # その時のレジスタの値を保持
+        # TODO: 10行以上の時はひとまず考えない
         # => 0x55555555463e <main+4>:     sub    rsp,0x10
-        lines = gdb.execute('x/2i $pc', to_string=True).split('\n')
+        lines = gdb.execute('x/10i $pc', to_string=True).split('\n')
         lines[0] = lines[0][3:]  # delete =>
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
         print("lines: ", lines[0].opcode)
@@ -273,6 +275,18 @@ def make_cfg():
                 gdb.execute("j *" + restore.addr)
                 continue
             break
+
+        # 次のオペコードがcallだった時, 危ないので実行せずに
+        # とばして実行する
+        # TODO: 他の方法を探す
+        if 'call' in lines[1].opcode:
+            for line in lines[2:]:
+                print("call: ", line.raw)
+                if 'call' in line.opcode:
+                    continue
+                gdb.execute("j *" + line.addr)
+                break
+            continue  
 
         # 今の命令がjmp系命令の時
         if 'j' in lines[0].opcode:

@@ -8,7 +8,7 @@ def get_stop_addr_objdump():
     objdump_args = ['objdump', '-d', '-M', 'intel', os.environ['TARGET_FILE']]
     proc1 = __subprocess_helper(objdump_args)
 
-    filter_main_args = ['grep', '-A', '30', '<main>']
+    filter_main_args = ['grep', '-A', '30', '<main>:']
     proc2 = __subprocess_helper(filter_main_args, proc1.stdout)
     proc1.stdout.close()
 
@@ -21,6 +21,7 @@ def get_stop_addr_objdump():
     proc1.stdout.close()
 
     output = hex(int(proc2.communicate()[0].decode('utf8').strip(' ').split('\n')[0], 16))
+    print("output: ", output)
     return output
 
 # objdumpとgdb実行時のoffsetを取得
@@ -40,6 +41,7 @@ def get_func_addrs(func_name):
     if '\n' in output:
         ret_addrs = output.split('\n')[1:-2]
         ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
+    print(ret_addrs)
     return ret_addrs
 
 # breakpointを立てるアドレスを再計算
@@ -57,6 +59,8 @@ def create_breakpoints(stop_addr):
     offset = get_offset_with_objdump_and_gdb(stop_addr)
     func_name = 'main'
     addrs = get_func_runtime_addrs(offset, func_name)
+    print("addrs: ", end="")
+    print(addrs)
     for addr in addrs:
         gdb.execute('b *' + addr)
 
@@ -213,10 +217,24 @@ def print_nodes(cfg):
         print("dst: [" + ", ".join([str(dst) for dst in node.dsts])  + "]")
         idx+=1
 
+def check_reach(addr):
+    print("addr: ", addr)
+    breakpoints = gdb.execute("info breakpoints", to_string=True).split('\n')
+    for idx in range(len(breakpoints)):
+        print("b=>", breakpoints[idx])
+        if addr in breakpoints[idx]:
+            if "already" in breakpoints[idx+1]:
+                return True
+            else:
+                return False
+    return False
+    
+
 def make_cfg():
     gdb.execute('b main')
     gdb.execute('run')
     line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
+    print("addr: ", line.addr)
     create_breakpoints(line.addr)
 
     # gdb.execute('info breakpoints')
@@ -230,7 +248,6 @@ def make_cfg():
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
-        gdb.execute('info breakpoints')
         print_nodes(cfg)
         # ステップ実行
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
@@ -240,7 +257,7 @@ def make_cfg():
         # その時のレジスタの値を保持
         # TODO: 10行以上の時はひとまず考えない
         # => 0x55555555463e <main+4>:     sub    rsp,0x10
-        lines = gdb.execute('x/10i $pc', to_string=True).split('\n')
+        lines = gdb.execute('x/5i $pc', to_string=True).split('\n')
         lines[0] = lines[0][3:]  # delete =>
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
         print("lines: ", lines[0].opcode)
@@ -257,6 +274,21 @@ def make_cfg():
             node.lb_addr = lines[0].addr
             cfg.append(node)
             cfg.append_dst_node(last_line.addr, lines[0].addr)
+
+
+        if check_reach(lines[0].addr[2:]):
+            print("reach!")
+            cfg.append_dst_node(last_line.addr, lines[0].addr)
+            # まだやり残したアドレスがある場合は,
+            # 情報を復元して実施
+            if len(stack) > 0:
+                (restore, status) = stack.pop()
+                restore_registers(restore.regs)
+                # statusを逆転
+                update_eflags(restore.opcode, not(status))
+                # # print("restore: " + restore.raw)
+                gdb.execute("j *" + restore.addr)
+                continue
 
         # 次のオペコードがret命令だった時, 
         # ノードのub_addrとしてcfgのnodesに保存
@@ -279,10 +311,11 @@ def make_cfg():
         # 次のオペコードがcallだった時, 危ないので実行せずに
         # とばして実行する
         # TODO: 他の方法を探す
-        if 'call' in lines[1].opcode:
+        print('call: ', gdb.execute('x/i $pc+1', to_string=True)[3:])
+        if 'call' in lines[1].raw:
             for line in lines[2:]:
-                print("call: ", line.raw)
-                if 'call' in line.opcode:
+                print("line=> ", line.raw)
+                if 'call' in line.raw:
                     continue
                 gdb.execute("j *" + line.addr)
                 break
@@ -359,6 +392,14 @@ def make_cfg():
                 node.lb_addr = lines[1].addr
                 continue
     print_nodes(cfg)
+    breakpoints = gdb.execute('info breakpoints', to_string=True).split('\n')
+    line = breakpoints[-1].split(' ')[0]
+    print(line)
+    cnt = 0
+    for b in breakpoints:
+        if 'times' in b:
+            cnt += 1
+    print(float(cnt) / float(line))
     gdb.execute('quit')
 
 make_cfg()

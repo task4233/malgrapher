@@ -1,11 +1,66 @@
 import gdb
 import sys
+import subprocess
+import os
+
+# objdumpでの止まるアドレスを取得
+def get_stop_addr_objdump():
+    objdump_args = ['objdump', '-d', '-M', 'intel', os.environ['TARGET_FILE']]
+    proc1 = __subprocess_helper(objdump_args)
+
+    filter_main_args = ['grep', '-A', '30', '<main>:']
+    proc2 = __subprocess_helper(filter_main_args, proc1.stdout)
+    proc1.stdout.close()
+
+    filter_stop_addr = ['grep', 'sub']
+    proc1 = __subprocess_helper(filter_stop_addr, proc2.stdout)
+    proc2.stdout.close()
+
+    filter_cut_args = ['cut', '-d', ':', '-f', '1']
+    proc2 = __subprocess_helper(filter_cut_args, proc1.stdout)
+    proc1.stdout.close()
+
+    output = hex(int(proc2.communicate()[0].decode('utf8').strip(' ').split('\n')[0], 16))
+    print("output: ", output)
+    return output
+
+# objdumpとgdb実行時のoffsetを取得
+def get_offset_with_objdump_and_gdb(stop_addr):
+    return hex(int(stop_addr, 0) - int(get_stop_addr_objdump(), 0))
+
+def get_func_addrs(func_name):
+    gdb_args = ['gdb', '-batch', '-ex', 'file ' + os.environ['TARGET_FILE'], '-ex', 'disassemble ' + func_name]
+    proc1 = __subprocess_helper(gdb_args)
+
+    filter_awk_args = ['awk', '{print $1}']
+    proc2 = __subprocess_helper(filter_awk_args, proc1.stdout)
+    proc1.stdout.close()
+
+    output = proc2.communicate()[0].decode('utf8')
+    ret_addrs = []
+    if '\n' in output:
+        ret_addrs = output.split('\n')[1:-2]
+        ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
+    print(ret_addrs)
+    return ret_addrs
+
+# breakpointを立てるアドレスを再計算
+def get_func_runtime_addrs(offset, func_name):
+    addrs = get_func_addrs(func_name)
+    addrs = [hex(int(addr, 0) + int(offset, 0)) for addr in addrs]
+    return addrs  
+
+def __subprocess_helper(args, _stdin=None, _stdout=subprocess.PIPE):
+    return subprocess.Popen(args, stdin=_stdin, stdout=_stdout)
+
 
 # from make_breakpoints.py
-def create_breakpoints():
-    addrs = []
-    with open('breakpoint_addrs.dat', 'r') as f:
-        addrs = f.readlines()
+def create_breakpoints(stop_addr):
+    offset = get_offset_with_objdump_and_gdb(stop_addr)
+    func_name = 'main'
+    addrs = get_func_runtime_addrs(offset, func_name)
+    print("addrs: ", end="")
+    print(addrs)
     for addr in addrs:
         gdb.execute('b *' + addr)
 
@@ -21,15 +76,16 @@ class Register:
             # regs['rax'] = 0x55555555463a
             if len(tmp) < 2:
                 continue
-            self.regs[tmp[0]] = tmp[1]
+            self.regs[tmp[0]] = tmp[1].split('\t')[0]
 
 def andf(f1, f2):
     return f1 + "&" + f2
 
+def orf(f1, f2):
+    return f1 + "|" + f2
 
 def notf(flag):
     return "!(" + flag + ")"
-
 
 def update_eflags(opcode, status):
     if opcode == "jmp":
@@ -37,6 +93,7 @@ def update_eflags(opcode, status):
 
     operation = 'set $eflags'
     flag = {
+        "OF": "1 << 11",
         "CF": "1 << 0",
         "PF": "1 << 2",
         "ZF": "1 << 6",
@@ -48,6 +105,7 @@ def update_eflags(opcode, status):
         "je": flag["ZF"],
         "jne": notf(flag["ZF"]),
         "ja": andf(notf(flag["CF"]), notf(flag["ZF"])),
+        "jle": andf(notf(flag["ZF"]), andf(flag["SF"], notf(flag["OF"]))),
     }
 
     if status:
@@ -83,7 +141,7 @@ class GDBMgr:
         tmp = line.split(' ')
         tmp = [t for t in tmp if t != '']
         # tmp:  ['0x555555554694', '<main+90>:\tje', '0x5555555546a4', '<main+106>\n']
-        # print("tmp:", tmp)
+        # # print("tmp:", tmp)
         self.addr = tmp[0]
         self.opcode = tmp[1][tmp[1].rfind('\t')+1:]
         self.args = tmp[1:]
@@ -98,10 +156,10 @@ class CFG:
     
     # 引数のaddr_strがどのノード番号に該当するかを返す
     def get_idx(self, addr_str):
-        print(addr_str)
+        # print(addr_str)
         for idx in range(len(self.nodes)):
             n = self.nodes[idx]
-            print("[", n.lb_addr, n.ub_addr, "]")
+            # print("[", n.lb_addr, n.ub_addr, "]")
             # 満たしたい条件は
             # n.lb_addr <= addr_str && addr_str <= n.ub_addr
             if int(n.lb_addr, 0) > int(addr_str, 0):
@@ -133,8 +191,8 @@ class CFG:
         """
         frm_idx = self.get_idx(frm_addr)
         dst_idx = self.get_idx(dst_addr)
-        print("frm: " + frm_addr + ", dst: " + dst_addr)
-        print("frm: " + str(frm_idx) + ", dst: " + str(dst_idx))
+        # print("frm: " + frm_addr + ", dst: " + dst_addr)
+        # print("frm: " + str(frm_idx) + ", dst: " + str(dst_idx))
         for dst in self.nodes[frm_idx].dsts:
             if dst == dst_idx:
                 return
@@ -159,11 +217,26 @@ def print_nodes(cfg):
         print("dst: [" + ", ".join([str(dst) for dst in node.dsts])  + "]")
         idx+=1
 
-def make_cfg():
-    create_breakpoints()
+def check_reach(addr):
+    print("addr: ", addr)
+    breakpoints = gdb.execute("info breakpoints", to_string=True).split('\n')
+    for idx in range(len(breakpoints)):
+        print("b=>", breakpoints[idx])
+        if addr in breakpoints[idx]:
+            if "already" in breakpoints[idx+1]:
+                return True
+            else:
+                return False
+    return False
+    
 
-    # 実行
+def make_cfg():
+    gdb.execute('b main')
     gdb.execute('run')
+    line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
+    print("addr: ", line.addr)
+    create_breakpoints(line.addr)
+
     # gdb.execute('info breakpoints')
 
     # 初期化
@@ -180,10 +253,11 @@ def make_cfg():
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
         gdb.execute('n')
 
-        # 現在の行から2行分だけ逆アセンブルしたコードを取得して, 
+        # 現在の行から10行分だけ逆アセンブルしたコードを取得して, 
         # その時のレジスタの値を保持
+        # TODO: 10行以上の時はひとまず考えない
         # => 0x55555555463e <main+4>:     sub    rsp,0x10
-        lines = gdb.execute('x/2i $pc', to_string=True).split('\n')
+        lines = gdb.execute('x/5i $pc', to_string=True).split('\n')
         lines[0] = lines[0][3:]  # delete =>
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
         print("lines: ", lines[0].opcode)
@@ -201,9 +275,24 @@ def make_cfg():
             cfg.append(node)
             cfg.append_dst_node(last_line.addr, lines[0].addr)
 
+
+        if check_reach(lines[0].addr[2:]):
+            print("reach!")
+            cfg.append_dst_node(last_line.addr, lines[0].addr)
+            # まだやり残したアドレスがある場合は,
+            # 情報を復元して実施
+            if len(stack) > 0:
+                (restore, status) = stack.pop()
+                restore_registers(restore.regs)
+                # statusを逆転
+                update_eflags(restore.opcode, not(status))
+                # # print("restore: " + restore.raw)
+                gdb.execute("j *" + restore.addr)
+                continue
+
         # 次のオペコードがret命令だった時, 
         # ノードのub_addrとしてcfgのnodesに保存
-        if 'ret' == lines[1].opcode:
+        if 'ret' in lines[1].opcode:
             node.ub_addr = lines[1].addr
             cfg.append(node)
 
@@ -214,10 +303,23 @@ def make_cfg():
                 restore_registers(restore.regs)
                 # statusを逆転
                 update_eflags(restore.opcode, not(status))
-                # print("restore: " + restore.raw)
+                # # print("restore: " + restore.raw)
                 gdb.execute("j *" + restore.addr)
                 continue
             break
+
+        # 次のオペコードがcallだった時, 危ないので実行せずに
+        # とばして実行する
+        # TODO: 他の方法を探す
+        print('call: ', gdb.execute('x/i $pc+1', to_string=True)[3:])
+        if 'call' in lines[1].raw:
+            for line in lines[2:]:
+                print("line=> ", line.raw)
+                if 'call' in line.raw:
+                    continue
+                gdb.execute("j *" + line.addr)
+                break
+            continue  
 
         # 今の命令がjmp系命令の時
         if 'j' in lines[0].opcode:
@@ -268,14 +370,14 @@ def make_cfg():
             ub_addr = line.addr
             cfg.append(node)
 
-            print_nodes(cfg)
+            # print_nodes(cfg)
             # 新たにノードを生成
             node = Node()
             node.lb_addr = ub_addr
             cfg.append_dst_node(lines[0].addr, line.addr)
 
             # メモリをrestoreしてtopの情報を復元し, falseで実行 
-            print("regs: ", lines[0].regs)   
+            # print("regs: ", lines[0].regs)   
             restore_registers(lines[0].regs)
             update_eflags(lines[0].opcode, False)
             stack.append((lines[0], False))
@@ -289,8 +391,15 @@ def make_cfg():
                 node = Node()
                 node.lb_addr = lines[1].addr
                 continue
-
+    print_nodes(cfg)
+    breakpoints = gdb.execute('info breakpoints', to_string=True).split('\n')
+    line = breakpoints[-1].split(' ')[0]
+    print(line)
+    cnt = 0
+    for b in breakpoints:
+        if 'times' in b:
+            cnt += 1
+    print(float(cnt) / float(line))
     gdb.execute('quit')
-
 
 make_cfg()

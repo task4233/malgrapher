@@ -13,5 +13,8 @@ make build
 make run
 ```
 
+## Examples(Gist)
+ - [Small Sample Cases](https://gist.github.com/task4233/83275adda24dc444b2f9c6949f32a056)
+
 ## Acknowledgments
 This project is the result of `SecHack365`, which is the human resource development program sponsored by National Institute of Information and Communications Technology(NICT).

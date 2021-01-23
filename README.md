@@ -10,8 +10,8 @@ This tool uses forced execution techniques which forces to execute both of the b
 
 ## Getting Started
 ```
-git clone https://github.com/task4233/makecfg
-cd makecfg
+git clone https://github.com/task4233/malgrapher
+cd malgrapher
 make build
 make run
 ```

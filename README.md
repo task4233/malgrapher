@@ -1,4 +1,4 @@
-# makecfg
+# malgrapher
 [![SecHack365](https://img.shields.io/badge/SecHack365-2020-ffd700.svg)](https://sechack365.nict.go.jp/)
 
 `makecfg` is a tool for making CFG(Control Flow Graph) from binary.

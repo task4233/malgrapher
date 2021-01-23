@@ -1,7 +1,10 @@
 # malgrapher
+
 [![SecHack365](https://img.shields.io/badge/SecHack365-2020-ffd700.svg)](https://sechack365.nict.go.jp/)
 
-`makecfg` is a tool for making CFG(Control Flow Graph) from binary.
+![icon](https://user-images.githubusercontent.com/29667656/105613600-d9185f80-5e06-11eb-9dd6-8e2cf7b1b00e.png)
+
+`malgrapher` is a tool for making CFG(Control Flow Graph) from binary.
 
 This tool uses forced execution techniques which forces to execute both of the branch from branch instraction with gdb.
 

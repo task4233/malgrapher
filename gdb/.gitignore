@@ -1,2 +1,7 @@
 *.dat
 *.out
+breakpoints
+breakpoints2
+offset
+Dockerfile
+test.py

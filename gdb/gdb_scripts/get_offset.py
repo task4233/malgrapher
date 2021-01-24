@@ -16,9 +16,6 @@ def get_offset():
 		if 'Entry' in line:
 			dynamic = line.split(' ')[2]
 			break
-
-	print(static)
-	print(dynamic)
 	offset = hex(int(dynamic, 0) - int(static, 0))
 	if isTest:
 		with open('offset', 'w') as f:

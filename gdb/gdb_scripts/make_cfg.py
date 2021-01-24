@@ -1,63 +1,8 @@
 import gdb
 import sys
-import subprocess
-import os
 
-def get_offset():
-	isTest = (os.environ['ENV'] == 'test')
-	static=''
-	lines = gdb.execute('info files', to_string=True).split('\n')
-	for line in lines:
-		if 'Entry' in line:
-			static = line.split(' ')[2]
-			break
-	gdb.execute('starti')
-	dynamic = ''
-	lines = gdb.execute('info files', to_string=True).split('\n')
-	for line in lines:
-		if 'Entry' in line:
-			dynamic = line.split(' ')[2]
-			break
-	offset = hex(int(dynamic, 0) - int(static, 0))
-	if isTest:
-		with open('offset', 'w') as f:
-			f.write(offset)
-		gdb.execute('quit')
-	else:
-		return offset
+# from create_breakpoints.py
 
-def get_func_addrs(func_name):
-    gdb_args = ['gdb', '-batch', '-ex', 'file ' + os.environ['TARGET_FILE'], '-ex', 'disassemble ' + func_name]
-    proc1 = __subprocess_helper(gdb_args)
-
-    filter_awk_args = ['awk', '{print $1}']
-    proc2 = __subprocess_helper(filter_awk_args, proc1.stdout)
-    proc1.stdout.close()
-
-    output = proc2.communicate()[0].decode('utf8')
-    ret_addrs = []
-    if '\n' in output:
-        ret_addrs = output.split('\n')[1:-2]
-        ret_addrs = [hex(int(addr.strip(' '), 16)) for addr in ret_addrs]
-    return ret_addrs
-
-# breakpointを立てるアドレスを再計算
-def get_func_runtime_addrs(offset, func_name):
-    addrs = get_func_addrs(func_name)
-    addrs = [hex(int(addr, 0) + int(offset, 0)) for addr in addrs]
-    return addrs  
-
-def __subprocess_helper(args, _stdin=None, _stdout=subprocess.PIPE):
-    return subprocess.Popen(args, stdin=_stdin, stdout=_stdout)
-
-
-# from make_breakpoints.py
-def create_breakpoints(stop_addr):
-    offset = get_offset()
-    func_name = 'main'
-    addrs = get_func_runtime_addrs(offset, func_name)
-    for addr in addrs:
-        gdb.execute('b *' + addr)
 
 # from make_cfg.py
 class Register:
@@ -210,12 +155,9 @@ def print_nodes(cfg):
         idx+=1
 
 def make_cfg():
-    get_offset()
+    create_breakpoints(get_offset())
     
-    gdb.execute('b main')
     gdb.execute('run')
-    line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
-    create_breakpoints(line.addr)
 
     # gdb.execute('info breakpoints')
 

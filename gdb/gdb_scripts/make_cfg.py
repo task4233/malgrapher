@@ -45,8 +45,6 @@ def get_functions():
 
 def get_addr_with_func_name(func_name):
     res_addrs = []
-    if not("main" in func_name):
-        return res_addrs
     order = ('disas \'%s\'' % func_name) if '.' in func_name else 'disas ' + func_name
     addrs = gdb.execute(order, to_string=True).split('\n')
     for addr in addrs:
@@ -242,6 +240,7 @@ def make_cfg():
         lines = [GDBMgr(line) for line in lines if len(line) > 0]
         # print("lines: ", lines[0].opcode)
         lines[0].regs = get_registers()
+        print(gdb.execute('x/10i $pc', to_string=True))
 
         # 今いるノードのlb_addrを更新
         if int(lines[0].addr, 0) < int(node.lb_addr, 0):
@@ -273,18 +272,24 @@ def make_cfg():
                 continue
             break
 
-        # 今の命令がjmp系命令の時
-        if 'j' in lines[0].opcode:
+        # 次の命令がjmp系命令の時
+        if 'j' in lines[1].opcode:
             # Nodeの終端なので, ub_addrを埋める
-            node.ub_addr = lines[0].addr
+            node.ub_addr = lines[1].addr
             # nodeをappend
             cfg.append(node)
 
+            # Falseの時の条件を保存
+            next_line = lines[2].addr
+            stack.append((lines[1], False))
+            gdb.execute("j *" + lines[1].addr)
+
+
             # trueに変更
-            update_eflags(lines[0].opcode, True)
+            update_eflags(lines[1].opcode, True)
 
             # ジャンプ先の情報を取得
-            gdb.execute("j *" + lines[0].addr)
+            gdb.execute("j *" + lines[1].addr)
             gdb.execute("c")
             line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
 

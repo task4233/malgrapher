@@ -1,5 +1,5 @@
 import unittest
-from makecfg import get_offset
+from makecfg.get_offset import get_offset
 
 class TestGetOffset(unittest.TestCase):
     """test methods for get_offset.py
@@ -12,5 +12,5 @@ class TestGetOffset(unittest.TestCase):
         """test method for get_offset
         """
         got = get_offset(self.target_file_path)
-        want = '0x555555554000'
+        want = '0x56555000'
         self.assertEqual(got, want)

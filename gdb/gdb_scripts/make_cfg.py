@@ -3,29 +3,28 @@ import sys
 import subprocess
 import os
 
-# objdumpでの止まるアドレスを取得
-def get_stop_addr_objdump():
-    objdump_args = ['objdump', '-d', '-M', 'intel', os.environ['TARGET_FILE']]
-    proc1 = __subprocess_helper(objdump_args)
-
-    filter_main_args = ['grep', '-A', '30', '<main>']
-    proc2 = __subprocess_helper(filter_main_args, proc1.stdout)
-    proc1.stdout.close()
-
-    filter_stop_addr = ['grep', 'sub']
-    proc1 = __subprocess_helper(filter_stop_addr, proc2.stdout)
-    proc2.stdout.close()
-
-    filter_cut_args = ['cut', '-d', ':', '-f', '1']
-    proc2 = __subprocess_helper(filter_cut_args, proc1.stdout)
-    proc1.stdout.close()
-
-    output = hex(int(proc2.communicate()[0].decode('utf8').strip(' ').split('\n')[0], 16))
-    return output
-
-# objdumpとgdb実行時のoffsetを取得
-def get_offset_with_objdump_and_gdb(stop_addr):
-    return hex(int(stop_addr, 0) - int(get_stop_addr_objdump(), 0))
+def get_offset():
+	isTest = (os.environ['ENV'] == 'test')
+	static=''
+	lines = gdb.execute('info files', to_string=True).split('\n')
+	for line in lines:
+		if 'Entry' in line:
+			static = line.split(' ')[2]
+			break
+	gdb.execute('starti')
+	dynamic = ''
+	lines = gdb.execute('info files', to_string=True).split('\n')
+	for line in lines:
+		if 'Entry' in line:
+			dynamic = line.split(' ')[2]
+			break
+	offset = hex(int(dynamic, 0) - int(static, 0))
+	if isTest:
+		with open('offset', 'w') as f:
+			f.write(offset)
+		gdb.execute('quit')
+	else:
+		return offset
 
 def get_func_addrs(func_name):
     gdb_args = ['gdb', '-batch', '-ex', 'file ' + os.environ['TARGET_FILE'], '-ex', 'disassemble ' + func_name]
@@ -54,7 +53,7 @@ def __subprocess_helper(args, _stdin=None, _stdout=subprocess.PIPE):
 
 # from make_breakpoints.py
 def create_breakpoints(stop_addr):
-    offset = get_offset_with_objdump_and_gdb(stop_addr)
+    offset = get_offset()
     func_name = 'main'
     addrs = get_func_runtime_addrs(offset, func_name)
     for addr in addrs:

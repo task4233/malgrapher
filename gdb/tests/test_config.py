@@ -27,7 +27,7 @@ class TestConfig(unittest.TestCase):
         want = 'target/test32'
         self.assertEqual(got, want)
 
-    def test_get_func_addrs(self):
+    """ def test_get_func_addrs(self):
         """test method for get_func_addrs
         """
 
@@ -110,7 +110,7 @@ class TestConfig(unittest.TestCase):
         want = ['0x5555555544fe', '0x555555554591', '0x5555555545e1', '0x555555554620',
                 '0x555555554628', '0x5555555546b6', '0x555555554724', '0x555555554730', '0x55555555473c']
         self.assertCountEqual(want, got)
-        self.assertListEqual(want, got)
+        self.assertListEqual(want, got) """
 
 
 if __name__ == '__main__':

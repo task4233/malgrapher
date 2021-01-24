@@ -211,6 +211,8 @@ def print_nodes(cfg):
         idx+=1
 
 def make_cfg():
+    get_offset()
+    
     gdb.execute('b main')
     gdb.execute('run')
     line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])

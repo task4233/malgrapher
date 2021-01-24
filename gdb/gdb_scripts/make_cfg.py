@@ -7,6 +7,7 @@ def create_breakpoints():
     """
     gdb.execute('starti')
     func_names = get_functions()
+    gdb.execute("b main")
     addrs = []
     for func_name in func_names:
         addrs.extend(get_addr_with_func_name(func_name))
@@ -44,6 +45,8 @@ def get_functions():
 
 def get_addr_with_func_name(func_name):
     res_addrs = []
+    if not("main" in func_name):
+        return res_addrs
     order = ('disas \'%s\'' % func_name) if '.' in func_name else 'disas ' + func_name
     addrs = gdb.execute(order, to_string=True).split('\n')
     for addr in addrs:
@@ -213,9 +216,9 @@ def print_nodes(cfg):
 def make_cfg():
     create_breakpoints()
     
-    gdb.execute('run')
+    gdb.execute('info breakpoints')
 
-    # gdb.execute('info breakpoints')
+    gdb.execute('c')
 
     # 初期化
     cfg = CFG()
@@ -226,10 +229,10 @@ def make_cfg():
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
-        # print_nodes(cfg)
+        print_nodes(cfg)
         # ステップ実行
         last_line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
-        gdb.execute('n')
+        gdb.execute('c')
 
         # 現在の行から2行分だけ逆アセンブルしたコードを取得して, 
         # その時のレジスタの値を保持
@@ -282,7 +285,7 @@ def make_cfg():
 
             # ジャンプ先の情報を取得
             gdb.execute("j *" + lines[0].addr)
-            gdb.execute("n")
+            gdb.execute("c")
             line = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:])
 
             # 新たにノードを生成

@@ -7,7 +7,7 @@ RUN apt-get update \
 WORKDIR /tmp/
 ENV TARGET_FILE '/tmp/bin'
 ENV ENV 'test'
-COPY ./gdb/.gdbinit /root/.gdbinit
+COPY ./gdb/.conf/.gdbinit /root/.gdbinit
 COPY ./gdb/target/test32 /tmp/bin
 COPY ./gdb/gdb_scripts/ /tmp/gdb_scripts/
 COPY ./gdb/.env.test /tmp/.env.test

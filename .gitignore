@@ -2,6 +2,10 @@
 !.gitignore
 
 !README.md
+!Makefile
+!entrypoint.sh
+!Dockerfile
+!.env.test
 
 # Whitelist
 !gdb/

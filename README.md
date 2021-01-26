@@ -1,6 +1,7 @@
 # malgrapher
 
 [![SecHack365](https://img.shields.io/badge/SecHack365-2020-ffd700.svg)](https://sechack365.nict.go.jp/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![icon](https://user-images.githubusercontent.com/29667656/105613600-d9185f80-5e06-11eb-9dd6-8e2cf7b1b00e.png)
 

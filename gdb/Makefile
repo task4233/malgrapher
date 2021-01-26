@@ -21,7 +21,7 @@ test:
 run:gdb -q -x ./src/step.py && rm peda-session-test.txt
 
 showmain:
-	$(ENV_TEST) gdb -batch -ex "file ${ENV_TARGET_FILE}" -ex 'disassemble main'
+	$(ENV_TEST) gdb -batch -ex "file ./target/test" -ex 'disassemble main'
 
 createcfg:
 	$(ENV_TEST) gdb -q -x ./gdb_scripts/make_cfg.py $(ENV_TARGET_FILE) 

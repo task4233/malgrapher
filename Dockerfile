@@ -8,7 +8,7 @@ WORKDIR /tmp/
 ENV TARGET_FILE '/tmp/bin'
 ENV ENV 'docker'
 COPY ./gdb/.conf/.gdbinit /root/.gdbinit
-COPY ./gdb/target/test32 /tmp/bin
+COPY ./gdb/target/test /tmp/bin
 COPY ./gdb/gdb_scripts/ /tmp/gdb_scripts/
 COPY ./.env.docker /tmp/.env
 COPY ./entrypoint.sh /tmp/entrypoint.sh

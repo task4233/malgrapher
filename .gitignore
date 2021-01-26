@@ -1,5 +1,6 @@
 *
 !.gitignore
+!.env.docker
 
 !README.md
 !Makefile
@@ -10,6 +11,7 @@
 # Whitelist
 !gdb/
 !gdb/*
+!gdb/.conf/*
 !gdb/docs/*
 !gdb/gdb_scripts/*
 !gdb/makecfg/*

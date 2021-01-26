@@ -138,7 +138,7 @@ class GDBMgr:
         # # print("tmp:", tmp)
         self.addr = tmp[0]
         self.opcode = tmp[1][tmp[1].rfind('\t')+1:]
-        self.args = tmp[1:]
+        self.args = tmp[2:]
         self.raw = line
         self.regs = regs
 
@@ -224,6 +224,7 @@ def make_cfg():
     # 最大到達アドレスは, デバッガのステップ実行で訪れたことのある最大のアドレス
     ub_addr = GDBMgr(gdb.execute('x/i $pc', to_string=True)[3:]).addr
     stack = []
+    call_stack = []
     last_line = GDBMgr("0x0 :     test    code")
 
     while True:
@@ -269,6 +270,13 @@ def make_cfg():
                 update_eflags(restore.opcode, not(status))
                 # # print("restore: " + restore.raw)
                 gdb.execute("j *" + restore.addr)
+                continue
+
+            # callされていた場合はreturn addrに戻る
+            if len(call_stack) > 0:
+                ret = call_stack.pop()
+                restore_registers(ret.regs)
+                gdb.execute("j *" + ret.addr)
                 continue
             break
 
@@ -339,6 +347,24 @@ def make_cfg():
             update_eflags(lines[0].opcode, False)
             stack.append((lines[0], False))
             gdb.execute("j *" + lines[0].addr)
+        
+        # 今の命令がcall系命令の時
+        # ひとまずジャンプ先のも実行するが, return addressに戻る
+        elif 'call' in lines[0].opcode:
+            # Nodeの終端なので, ub_addrを埋める
+            node.ub_addr = lines[0].addr
+            # nodeをappend
+            cfg.append(node)
+
+            # リターンアドレスを保持
+            lines[1].regs = lines[0].regs
+            call_stack.append(lines[1])
+
+            # print_nodes(cfg)
+            # 新たにノードを生成
+            node = Node()
+            node.lb_addr = ub_addr
+            cfg.append_dst_node(lines[0].addr, lines[0].args[0])
         else:
             # 次が区切れめなら, nodeを断ち切る
             if lines[1].addr == ub_addr:

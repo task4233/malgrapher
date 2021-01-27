@@ -9,6 +9,9 @@
 
 This tool uses forced execution techniques which forces to execute both of the branch from branch instraction with gdb.
 
+## Requirements
+Docker, make
+
 ## Getting Started
 ```
 git clone https://github.com/task4233/malgrapher

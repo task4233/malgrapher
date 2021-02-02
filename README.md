@@ -5,7 +5,8 @@
 
 ![icon](https://user-images.githubusercontent.com/29667656/105613600-d9185f80-5e06-11eb-9dd6-8e2cf7b1b00e.png)
 
-`malgrapher` is a tool for making CFG(Control Flow Graph) from binary.
+`malgrapher` is a tool for making CFG(Control Flow Graph) from binary.  
+Main Script is [gdb/gdb_scripts/make_cfg.py](./gdb/gdb_scripts/make_cfg.py).
 
 This tool uses forced execution techniques which forces to execute both of the branch from branch instraction with gdb.
 

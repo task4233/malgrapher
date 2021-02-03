@@ -95,6 +95,7 @@ def update_eflags(opcode, status):
         "PF": "1 << 2",
         "ZF": "1 << 6",
         "SF": "1 << 7",
+        "OF": "1 << 11",
     }
 
     true_stat = {
@@ -102,6 +103,7 @@ def update_eflags(opcode, status):
         "je": flag["ZF"],
         "jne": notf(flag["ZF"]),
         "ja": andf(notf(flag["CF"]), notf(flag["ZF"])),
+        "jg": andf(andf(notf(flag["ZF"]), flag["SF"]), flag["OF"]),
     }
 
     if status:

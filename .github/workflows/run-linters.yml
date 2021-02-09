@@ -1,0 +1,26 @@
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+name: Run Linters(autopep8/flake8)
+
+jobs:
+  exec:
+    name: flake8
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: run autopep8
+      uses: ./.github/actions/run-linters
+      with:
+        run: autopep8
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        pr-num: ${{ github.event.pull_request.number }}
+    
+    - name: run flake8
+      uses: ./.github/actions/run-linters
+      with:
+        run: flake8
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        pr-num: ${{ github.event.pull_request.number }}

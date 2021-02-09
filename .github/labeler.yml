@@ -1,0 +1,8 @@
+version: 1
+labels:
+  - label: "feature"
+    branch: "^feat/.*"
+  - label: "bug"
+    branch: "^fix/.*"
+  - label: "chore"
+    branch: "^chore/.*"

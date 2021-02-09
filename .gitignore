@@ -9,6 +9,10 @@
 !.env.test
 
 # Whitelist
+!.github/
+!.github/*
+
+
 !gdb/
 !gdb/*
 !gdb/.conf/*

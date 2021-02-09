@@ -1,0 +1,35 @@
+name: 'Linter'
+author: 'task4233'
+description: 'execute linter'
+inputs:
+  run:
+    description: 'execute commands. [autopep8/flake8]'
+    required: true
+  working-dir:
+    description: 'package working directory.'
+    default: '.'
+    required: false
+  send-comment:
+    description: 'if true, send comment to pull request'
+    default: true
+    required: false
+  repo-token:
+    description: "GitHub token."
+    default: ""
+    required: false
+  pr-num:
+    description: "issued Pull Request number"
+    default: ""
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.run }}
+    - ${{ inputs.working-dir }}
+    - ${{ inputs.send-comment }}
+    - ${{ inputs.repo-token }}
+    - ${{ inputs.pr-num }}
+branding:
+  icon: 'check-circle'
+  color: 'green'

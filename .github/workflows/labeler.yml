@@ -1,0 +1,13 @@
+name: labeler
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: srvaroa/labeler@v0.6
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

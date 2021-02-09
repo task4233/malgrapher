@@ -77,7 +77,7 @@ run_flake8() {
     set +xe
 
     # https://github.community/t/git-ambiguous-argument-master/17832/2
-    URL="https://api.github.com/repos/SIT-DigiCre/groupware/pulls/${GITHUB_PR_NUM}/files"
+    URL="https://api.github.com/repos/task4233/malgrapher/pulls/${GITHUB_PR_NUM}/files"
     FILES=$(curl -s -X GET -G "${URL}" | jq -r '.[].filename')
 
     for FILE in ${FILES}; do

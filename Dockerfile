@@ -8,9 +8,10 @@ WORKDIR /tmp/
 ENV TARGET_FILE '/tmp/bin'
 ENV ENV 'docker'
 COPY ./gdb/.conf/.gdbinit /root/.gdbinit
-COPY ./gdb/target/sample264 /tmp/bin
 COPY ./gdb/gdb_scripts/ /tmp/gdb_scripts/
 COPY ./.env.docker /tmp/.env
 COPY ./entrypoint.sh /tmp/entrypoint.sh
 COPY ./gdb/Makefile /tmp/Makefile
+
+COPY ./main /tmp/bin
 CMD ["/bin/sh", "/tmp/entrypoint.sh", "&>", "result.txt"]

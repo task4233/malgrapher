@@ -12,6 +12,8 @@
 !.github/
 !.github/*
 
+!similarity/
+!similarity/*
 
 !gdb/
 !gdb/*

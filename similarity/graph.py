@@ -11,7 +11,10 @@ import os
 
 
 class Graph:
-    def __init__(self, name: str, graph: Union[MultiDiGraph, MultiGraph]) -> None:
+    def __init__(
+            self,
+            name: str,
+            graph: Union[MultiDiGraph, MultiGraph]) -> None:
         self.name = name
         assert graph is not None
         self.graph = graph
@@ -22,7 +25,10 @@ def get_features_from_graph(graph: Union[MultiDiGraph, MultiGraph]):
     return {k: v for k, v in features}
 
 
-def explore_subgraphs(name: str, graph: Union[MultiDiGraph, MultiGraph], rounds: int = 2) -> TaggedDocument:
+def explore_subgraphs(
+        name: str,
+        graph: Union[MultiDiGraph, MultiGraph],
+        rounds: int = 2) -> TaggedDocument:
     features = get_features_from_graph(graph)
     machine = WeisfeilerLehmanMachine(graph, features, rounds)
     return TaggedDocument(words=machine.extracted_features, tags=["g_" + name])
@@ -45,9 +51,13 @@ def get_graph_embeddings(
     return model
 
 
-def save_embeddings(output_path: str, model: Doc2Vec, graphs: List[TaggedDocument], dimensions: int):
+def save_embeddings(
+        output_path: str,
+        model: Doc2Vec,
+        graphs: List[TaggedDocument],
+        dimensions: int):
     if not os.path.exists(output_path):
-        with open(output_path, 'wb') as f:
+        with open(output_path, 'wb'):
             pass
 
     out = []
@@ -68,5 +78,5 @@ if __name__ == "__main__":
         graphs = [g1, g2]
         model = get_graph_embeddings(graphs, dimensions=dimensions)
         save_embeddings('./out/ls.model', model, graphs, dimensions)
-    except Exception as e:
+    except Exception:
         print(traceback.format_exc())

@@ -1,4 +1,4 @@
-import pygraphviz  # it requires A.draw()
+# import pygraphviz  # it requires A.draw()
 from networkx.classes.multidigraph import MultiDiGraph
 from networkx.classes.multigraph import MultiGraph
 from networkx.drawing.nx_agraph import to_agraph
@@ -9,7 +9,9 @@ import json
 import os
 
 
-def convert_dot_to_networkx(dot_file_path: str, saved_file_path: str = '') -> Union[MultiDiGraph, MultiGraph]:
+def convert_dot_to_networkx(
+        dot_file_path: str,
+        saved_file_path: str = '') -> Union[MultiDiGraph, MultiGraph]:
     if not os.path.exists(dot_file_path):
         print(f'{dot_file_path} does not exist')
         assert(os.path.exists(dot_file_path))

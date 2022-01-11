@@ -1,5 +1,4 @@
 import subprocess
-import time
 import threading
 
 
@@ -40,7 +39,9 @@ def generate_dot_by_radare2(bin_file_path: str, sample_name: str) -> str:
     # # create file
     # with open(saved_file_path, 'w'): pass
 
-    # args = ['r2', '-d', '-c', 'aa', '-c', f'agCd>{saved_file_path}', '-q', bin_file_path]
+    # args = ['r2', '-d',
+    #         '-c', 'aa', '-c', f'agCd>{saved_file_path}',
+    #         '-q', bin_file_path]
     # print(args)
     # try:
     #     cmd = Command(args)

@@ -1,4 +1,3 @@
-from typing import Type
 from gensim.models.keyedvectors import KeyedVectors
 import pytest
 from node import get_node_embedings

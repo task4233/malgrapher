@@ -1,6 +1,5 @@
 from convert import convert_dot_to_networkx
 from generate_dot_by_radare2 import generate_dot_by_radare2
-from gensim.models.keyedvectors import KeyedVectors
 import glob
 import pandas as pd
 
@@ -51,16 +50,18 @@ if __name__ == "__main__":
         dataset.set_dot_file_path(generate_dot_by_radare2(
             dataset.bin_file_path, dataset.sample_name))
         if not os.path.exists(dataset.dot_file_path):
-            print(
-                f'{dataset.dot_file_path} is not created. Please check the reason manually...')
+            print(f'{dataset.dot_file_path} is not created.')
+            print('Please check the reason manually...')
             continue
         graphs.append(Graph(dataset.sample_name,
                       convert_dot_to_networkx(dataset.dot_file_path)))
 
     model = get_graph_embeddings(graphs)
 
-    results = pd.DataFrame({}, columns=['1st Similar file', '1st Similarity Score',
-                           '2nd Similar file', '2nd Similarity Score', '3rd Similar file', '3rd Similarity Score'])
+    results = pd.DataFrame({}, columns=[
+        '1st Similar file', '1st Similarity Score',
+        '2nd Similar file', '2nd Similarity Score',
+        '3rd Similar file', '3rd Similarity Score'])
 
     for graph in graphs:
         print(f'get files which are similar to {graph.name}')

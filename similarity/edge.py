@@ -8,7 +8,9 @@ from node2vec.edges import HadamardEmbedder
 import traceback
 
 
-def get_edge_embeddings(G: Union[MultiDiGraph, MultiGraph], debug: bool = False) -> HadamardEmbedder:
+def get_edge_embeddings(
+        G: Union[MultiDiGraph, MultiGraph],
+        debug: bool = False) -> HadamardEmbedder:
     if G is None:
         raise TypeError(' A type of G must be MultiDiGraph or MultiGraph')
 
@@ -33,5 +35,5 @@ if __name__ == '__main__':
         G = convert_dot_to_networkx('./out/ls.dot')
         embeds = get_edge_embeddings(G)
 
-    except Exception as e:
+    except Exception:
         print(traceback.format_exc())

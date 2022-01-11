@@ -14,7 +14,7 @@ def test_get_node_embeddings():
     wv = get_node_embedings(G)
     assert type(wv) is KeyedVectors
 
+
 def test_get_node_embeddings_when_G_is_None():
     with pytest.raises(TypeError):
         get_node_embedings(None)
-    

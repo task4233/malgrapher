@@ -9,11 +9,13 @@ import traceback
 import pandas as pd
 import os
 
+
 class Graph:
     def __init__(self, name: str, graph: Union[MultiDiGraph, MultiGraph]) -> None:
         self.name = name
         assert graph is not None
         self.graph = graph
+
 
 def get_features_from_graph(graph: Union[MultiDiGraph, MultiGraph]):
     features = nx.degree(graph)
@@ -42,17 +44,20 @@ def get_graph_embeddings(
                     min_count=min_count)
     return model
 
+
 def save_embeddings(output_path: str, model: Doc2Vec, graphs: List[TaggedDocument], dimensions: int):
     if not os.path.exists(output_path):
-        with open(output_path, 'wb') as f: pass
-        
+        with open(output_path, 'wb') as f:
+            pass
+
     out = []
     for graph in graphs:
         out.append([graph.name] + list(model.dv["g_"+graph.name]))
-    
+
     column_names = ["types"]+["x_"+str(dim) for dim in range(dimensions)]
     out = pd.DataFrame(out, columns=column_names)
     out.to_csv(output_path, index=None)
+
 
 if __name__ == "__main__":
     dimensions = 128

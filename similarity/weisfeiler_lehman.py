@@ -1,9 +1,11 @@
 import hashlib
 
+
 class WeisfeilerLehmanMachine:
     """
     Weisfeiler Lehman feature extractor class.
     """
+
     def __init__(self, graph, features, iterations):
         """
         Initialization method which also executes feature extraction.
@@ -28,12 +30,14 @@ class WeisfeilerLehmanMachine:
         for node in self.nodes:
             nebs = self.graph.neighbors(node)
             degs = [self.features[neb] for neb in nebs]
-            features = [str(self.features[node])]+sorted([str(deg) for deg in degs])
+            features = [str(self.features[node])] + \
+                sorted([str(deg) for deg in degs])
             features = "_".join(features)
             hash_object = hashlib.md5(features.encode())
             hashing = hash_object.hexdigest()
             new_features[node] = hashing
-        self.extracted_features = self.extracted_features + list(new_features.values())
+        self.extracted_features = self.extracted_features + \
+            list(new_features.values())
         return new_features
 
     def do_recursions(self):
